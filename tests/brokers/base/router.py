@@ -1,5 +1,5 @@
 import asyncio
-from typing import Type
+from typing import Any, Type
 from unittest.mock import Mock
 
 import pytest
@@ -184,6 +184,35 @@ class RouterTestcase(
             await asyncio.wait(
                 (
                     asyncio.create_task(pub_broker.publish("hello", f"test_{queue}")),
+                    asyncio.create_task(event.wait()),
+                ),
+                timeout=self.timeout,
+            )
+
+            assert event.is_set()
+
+    async def test_include_publisher_with_prefix(
+        self,
+        router: BrokerRouter,
+        pub_broker: BrokerUsecase,
+        queue: str,
+        event: asyncio.Event,
+    ) -> None:
+        args2, kwargs2 = self.get_subscriber_params(f"test_{queue}")
+
+        @pub_broker.subscriber(*args2, **kwargs2)
+        async def handler(m: Any) -> None:
+            event.set()
+
+        publisher = router.publisher(queue)
+        pub_broker.include_router(router, prefix="test_")
+
+        async with pub_broker:
+            await pub_broker.start()
+
+            await asyncio.wait(
+                (
+                    asyncio.create_task(publisher.publish("hello")),
                     asyncio.create_task(event.wait()),
                 ),
                 timeout=self.timeout,
