@@ -1,10 +1,14 @@
-from typing import Awaitable, Callable
+from collections.abc import Awaitable, Callable
 
+import prometheus_client
 from nats.aio.msg import Msg
+from typing_extensions import assert_type
 
-from faststream.nats import NatsBroker, NatsMessage, NatsRoute, NatsRouter
+from faststream._internal.basic_types import DecodedMessage
+from faststream.nats import NatsBroker, NatsMessage, NatsRoute, NatsRouter, PubAck
 from faststream.nats.fastapi import NatsRouter as FastAPIRouter
-from faststream.types import DecodedMessage
+from faststream.nats.opentelemetry import NatsTelemetryMiddleware
+from faststream.nats.prometheus import NatsPrometheusMiddleware
 
 
 def sync_decoder(msg: NatsMessage) -> DecodedMessage:
@@ -16,7 +20,8 @@ async def async_decoder(msg: NatsMessage) -> DecodedMessage:
 
 
 async def custom_decoder(
-    msg: NatsMessage, original: Callable[[NatsMessage], Awaitable[DecodedMessage]]
+    msg: NatsMessage,
+    original: Callable[[NatsMessage], Awaitable[DecodedMessage]],
 ) -> DecodedMessage:
     return await original(msg)
 
@@ -27,15 +32,16 @@ NatsBroker(decoder=custom_decoder)
 
 
 def sync_parser(msg: Msg) -> NatsMessage:
-    return ""  # type: ignore
+    return ""  # type: ignore[return-value]
 
 
 async def async_parser(msg: Msg) -> NatsMessage:
-    return ""  # type: ignore
+    return ""  # type: ignore[return-value]
 
 
 async def custom_parser(
-    msg: Msg, original: Callable[[Msg], Awaitable[NatsMessage]]
+    msg: Msg,
+    original: Callable[[Msg], Awaitable[NatsMessage]],
 ) -> NatsMessage:
     return await original(msg)
 
@@ -173,7 +179,7 @@ async def handle14() -> None: ...
 def sync_handler() -> None: ...
 
 
-def async_handler() -> None: ...
+async def async_handler() -> None: ...
 
 
 NatsRouter(
@@ -198,7 +204,7 @@ NatsRouter(
             parser=custom_parser,
             decoder=custom_decoder,
         ),
-    )
+    ),
 )
 
 
@@ -264,3 +270,39 @@ def handle20() -> None: ...
 @fastapi_router.subscriber("test")
 @fastapi_router.publisher("test2")
 async def handle21() -> None: ...
+
+
+otlp_middleware = NatsTelemetryMiddleware()
+NatsBroker().add_middleware(otlp_middleware)
+NatsBroker(middlewares=[otlp_middleware])
+
+
+prometheus_middleware = NatsPrometheusMiddleware(registry=prometheus_client.REGISTRY)
+NatsBroker().add_middleware(prometheus_middleware)
+NatsBroker(middlewares=[prometheus_middleware])
+
+
+async def check_response_type() -> None:
+    broker = NatsBroker()
+
+    broker_response = await broker.request(None, "test")
+    assert_type(broker_response, NatsMessage)
+
+    publisher = broker.publisher("test")
+    assert_type(await publisher.request(None, "test"), NatsMessage)
+
+
+async def check_publish_type() -> None:
+    broker = NatsBroker()
+
+    assert_type(await broker.publish(None, "test"), None)
+    assert_type(await broker.publish(None, "test", stream="stream"), PubAck)
+
+
+async def check_publisher_publish_type() -> None:
+    broker = NatsBroker()
+
+    publisher = broker.publisher("test")
+
+    assert_type(await publisher.publish(None, "test"), None)
+    assert_type(await publisher.publish(None, "test", stream="stream"), PubAck)
