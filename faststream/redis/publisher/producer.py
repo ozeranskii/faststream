@@ -30,9 +30,9 @@ class RedisFastProducer(ProducerProto[RedisPublishCommand]):
         parser: Optional["CustomCallable"],
         decoder: Optional["CustomCallable"],
         message_format: type["MessageFormat"],
+        serializer: Optional["SerializerProto"],
     ) -> None:
         self._connection = connection
-        self.serializer: SerializerProto | None = None
 
         default = RedisPubSubParser(SimpleParserConfig(message_format))
         self._parser = ParserComposition(
@@ -43,6 +43,7 @@ class RedisFastProducer(ProducerProto[RedisPublishCommand]):
             decoder,
             default.decode_message,
         )
+        self.serializer = serializer
 
     @override
     async def publish(self, cmd: "RedisPublishCommand") -> int | bytes:

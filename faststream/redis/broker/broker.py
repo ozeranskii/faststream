@@ -236,6 +236,7 @@ class RedisBroker(
                     parser=parser,
                     decoder=decoder,
                     message_format=self.message_format,
+                    serializer=serializer,
                 ),
                 message_format=self.message_format,
                 # both args
