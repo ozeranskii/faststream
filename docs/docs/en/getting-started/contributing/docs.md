@@ -42,7 +42,7 @@ Enough:
     ```
 4. Upgrade pip
     ```bash
-   pip install --upgrade pip
+    pip install --upgrade pip
     ```
 
 5. Install documentation dependencies
