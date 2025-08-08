@@ -40,14 +40,19 @@ Enough:
     ```bash
     source venv/bin/activate
     ```
-4. Install documentation dependencies
+4. Upgrade pip
+    ```bash
+   pip install --upgrade pip
+    ```
+
+5. Install documentation dependencies
     ```bash
     pip install --group devdocs -e .
     ```
-5. Go to the `docs/` directory
-6. Start the local documentation server
+6. Go to the `docs/` directory
+7. Start the local documentation server
     ```bash
-    mkdocs serve
+    python -m mkdocs serve
     ```
 
 Now all changes in the documentation files will be reflected on your local version of the site.
