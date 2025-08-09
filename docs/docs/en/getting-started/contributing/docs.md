@@ -29,30 +29,19 @@ You can report all this in [discussions](https://github.com/ag2ai/faststream/dis
 
 To develop the documentation, you don't even need to install the entire **FastStream** project as a whole.
 
-Enough:
+1. [Install justfile on your system](https://just.systems/man/en/prerequisites.html)
 
-1. Clone the project repository
-2. Create a virtual environment
+    View all available commands:
+
     ```bash
-    python -m venv venv
-    ```
-3. Activate it
-    ```bash
-    source venv/bin/activate
-    ```
-4. Upgrade pip
-    ```bash
-    pip install --upgrade pip
+    just
     ```
 
-5. Install documentation dependencies
+2. [Install uv on your system](https://docs.astral.sh/uv/getting-started/installation/)
+3. Clone the project repository
+4. Start the local documentation server
     ```bash
-    pip install --group devdocs -e .
-    ```
-6. Go to the `docs/` directory
-7. Start the local documentation server
-    ```bash
-    python -m mkdocs serve
+    just docs-serve
     ```
 
 Now all changes in the documentation files will be reflected on your local version of the site.
