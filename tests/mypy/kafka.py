@@ -17,6 +17,12 @@ from faststream.kafka.fastapi import KafkaRouter as FastAPIRouter
 from faststream.kafka.opentelemetry import KafkaTelemetryMiddleware
 from faststream.kafka.prometheus import KafkaPrometheusMiddleware
 from faststream.kafka.publisher import BatchPublisher, DefaultPublisher
+from faststream.kafka.subscriber.usecase import (
+    BatchSubscriber,
+    ConcurrentBetweenPartitionsSubscriber,
+    ConcurrentDefaultSubscriber,
+    DefaultSubscriber,
+)
 
 
 def sync_decoder(msg: KafkaMessage) -> DecodedMessage:
@@ -289,18 +295,7 @@ KafkaBroker().add_middleware(prometheus_middleware)
 KafkaBroker(middlewares=[prometheus_middleware])
 
 
-async def check_response_type() -> None:
-    broker = KafkaBroker()
-
-    broker_response = await broker.request(None, "test")
-    assert_type(broker_response, KafkaMessage)
-
-    publisher = broker.publisher("test")
-    publisher_response = await publisher.request(None, "test")
-    assert_type(publisher_response, KafkaMessage)
-
-
-async def check_publish_type() -> None:
+async def check_broker_publish_result_type() -> None:
     broker = KafkaBroker()
 
     publish_with_confirm = await broker.publish(None, "test")
@@ -313,7 +308,7 @@ async def check_publish_type() -> None:
     assert_type(publish_confirm_bool, RecordMetadata | asyncio.Future[RecordMetadata])
 
 
-async def check_publisher_publish_type() -> None:
+async def check_publisher_publish_result_types() -> None:
     broker = KafkaBroker()
 
     publisher = broker.publisher("test")
@@ -329,7 +324,7 @@ async def check_publisher_publish_type() -> None:
     assert_type(publish_confirm_bool, RecordMetadata | asyncio.Future[RecordMetadata])
 
 
-async def check_publish_batch_type() -> None:
+async def check_publish_batch_result_type() -> None:
     broker = KafkaBroker()
 
     publish_with_confirm = await broker.publish_batch(None, topic="test")
@@ -346,7 +341,7 @@ async def check_publish_batch_type() -> None:
     assert_type(publish_confirm_bool, RecordMetadata | asyncio.Future[RecordMetadata])
 
 
-async def check_publisher_publish_batch_type() -> None:
+async def check_publisher_publish_batch_result_type() -> None:
     broker = KafkaBroker()
 
     publisher = broker.publisher("test", batch=True)
@@ -362,6 +357,45 @@ async def check_publisher_publish_batch_type() -> None:
         None, topic="test", no_confirm=fake_bool()
     )
     assert_type(publish_confirm_bool, RecordMetadata | asyncio.Future[RecordMetadata])
+
+
+async def check_request_response_type() -> None:
+    broker = KafkaBroker()
+
+    broker_response = await broker.request(None, "test")
+    assert_type(broker_response, KafkaMessage)
+
+    publisher = broker.publisher("test")
+    publisher_response = await publisher.request(None, "test")
+    assert_type(publisher_response, KafkaMessage)
+
+
+async def check_subscriber_message_type() -> None:
+    broker = KafkaBroker()
+
+    subscriber = broker.subscriber("test")
+
+    message = await subscriber.get_one()
+    assert_type(message, KafkaMessage | None)
+
+    async for msg in subscriber:
+        assert_type(msg, KafkaMessage)
+
+
+def check_subscriber_instance_type() -> None:
+    broker = KafkaBroker()
+
+    sub1 = broker.subscriber("test")
+    assert_type(sub1, DefaultSubscriber)
+
+    sub2 = broker.subscriber("test", batch=True)
+    assert_type(sub2, BatchSubscriber)
+
+    sub3 = broker.subscriber("test", max_workers=2)
+    assert_type(sub3, ConcurrentDefaultSubscriber)
+
+    sub4 = broker.subscriber("test", group_id="test", max_workers=2)
+    assert_type(sub4, ConcurrentBetweenPartitionsSubscriber)
 
 
 def fake_bool() -> bool:
