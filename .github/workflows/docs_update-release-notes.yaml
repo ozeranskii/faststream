@@ -55,7 +55,7 @@ jobs:
         with:
           token: ${{ secrets.AUTOMERGE_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
-          base: "main" # The branch you want to merge into
+          base: "dev" # The branch you want to merge into
           title: "Update Release Notes for ${{ env.TAG_NAME }}"
           commit-message: "Update Release Notes for ${{ env.TAG_NAME }}"
           body: "This is an automated pull request to update the release notes for ${{ env.TAG_NAME }}"
