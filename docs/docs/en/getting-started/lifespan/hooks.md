@@ -30,11 +30,11 @@ There are **four types of hooks**:
 The table below summarizes what is available in each of the hooks at different stages of the broker's life.
 
 | Hook                | CLI args | Context | Broker |
-| ------------------- | -------- | ------- | ------ |
-| **on\_startup**     | ✅        | ✅       | ❌      |
-| **after\_startup**  | ❌        | ✅       | ✅      |
-| **on\_shutdown**    | ❌        | ✅       | ✅      |
-| **after\_shutdown** | ❌        | ❌       | ❌      |
+| ------------------- | -------- | ------ | ----- |
+| **on\_startup**     | ✅        | ✅      | ❌     |
+| **after\_startup**  | ❌        | ✅      | ✅     |
+| **on\_shutdown**    | ❌        | ✅      | ✅     |
+| **after\_shutdown** | ❌        | ✅      | ❌      |
 
 ## Call Order
 
