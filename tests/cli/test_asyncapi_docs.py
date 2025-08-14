@@ -177,6 +177,8 @@ def test_gen_asyncapi_for_kafka_app(
             *commands,
         ) as cli_thread,
     ):
+        cli_thread.wait_for_stderr("Your project AsyncAPI scheme")
+
         assert cli_thread.process
 
         schema_path = app_path.parent / "schema.json"
@@ -198,14 +200,17 @@ def test_gen_wrong_path(faststream_cli: FastStreamCLIFactory) -> None:
 @pytest.mark.slow()
 @skip_windows
 @require_aiokafka
+@pytest.mark.flaky(reruns=3, reruns_delay=1)
 def test_serve_asyncapi_docs_from_app(
     generate_template: GenerateTemplateFactory,
     faststream_cli: FastStreamCLIFactory,
 ) -> None:
     with (
         generate_template(app_code) as app_path,
-        faststream_cli("faststream", "docs", "serve", f"{app_path.stem}:app"),
+        faststream_cli("faststream", "docs", "serve", f"{app_path.stem}:app") as cli,
     ):
+        cli.wait_for_stderr("Please, do not use it in production.")
+
         response = httpx.get("http://localhost:8000")
         assert "<title>FastStream AsyncAPI</title>" in response.text
         assert response.status_code == 200
@@ -214,6 +219,7 @@ def test_serve_asyncapi_docs_from_app(
 @pytest.mark.slow()
 @skip_windows
 @require_aiokafka
+@pytest.mark.flaky(reruns=3, reruns_delay=1)
 @pytest.mark.parametrize(
     ("doc_filename", "doc"),
     (
@@ -229,8 +235,10 @@ def test_serve_asyncapi_docs_from_file(
 ) -> None:
     with (
         generate_template(doc, filename=doc_filename) as doc_path,
-        faststream_cli("faststream", "docs", "serve", str(doc_path)),
+        faststream_cli("faststream", "docs", "serve", str(doc_path)) as cli,
     ):
+        cli.wait_for_stderr("Please, do not use it in production.")
+
         response = httpx.get("http://localhost:8000")
         assert "<title>FastStream AsyncAPI</title>" in response.text
         assert response.status_code == 200
