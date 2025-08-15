@@ -8,7 +8,7 @@ repos:
         stages: [commit-msg]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
     -   id: trailing-whitespace
     -   id: mixed-line-ending
@@ -85,6 +85,15 @@ repos:
         language: python
         entry: just semgrep
         types: [python]
+        require_serial: true
+        verbose: true
+        pass_filenames: false
+
+    -   id: zizmor
+        name: zizmor
+        language: python
+        entry: just zizmor
+        files: ^\.github\/workflows\/
         require_serial: true
         verbose: true
         pass_filenames: false
