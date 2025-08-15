@@ -29,12 +29,12 @@ There are **four types of hooks**:
 
 The table below summarizes what is available in each of the hooks at different stages of the broker's life.
 
-| Hook                | CLI args | Context | Broker |
-| ------------------- | -------- | ------ | ----- |
-| **on\_startup**     | ✅        | ✅      | ❌     |
-| **after\_startup**  | ❌        | ✅      | ✅     |
-| **on\_shutdown**    | ❌        | ✅      | ✅     |
-| **after\_shutdown** | ❌        | ✅      | ❌      |
+| Hook                | CLI args | Context | Broker life |
+| ------------------- | -------- |---------|-------------|
+| **on\_startup**     | ✅        | ✅       | ❌           |
+| **after\_startup**  | ❌        | ✅       | ✅           |
+| **on\_shutdown**    | ❌        | ✅       | ✅           |
+| **after\_shutdown** | ❌        | ✅       | ❌           |
 
 ## Call Order
 
@@ -43,26 +43,44 @@ Lifespan hooks are called in a strict order following the application’s lifecy
 You can define multiple functions for a single hook — they will be executed in the order they were registered. The order in which different hooks are declared does not affect their execution: FastStream guarantees that hooks are called according to the lifecycle sequence, regardless of registration order.
 
 ```python
+# --- Startup hooks ---
+@app.on_startup
+async def startup_first(logger: Logger):
+    logger.info("startup_first called")
+
+@app.on_startup
+async def startup_second(logger: Logger):
+    logger.info("startup_second called")
+
+# --- After startup hooks ---
 @app.after_startup
 async def after_startup(logger: Logger):
     logger.info("after_startup called")
 
-@app.on_startup
-async def first_start(logger: Logger):
-    logger.info("first_start called")
+# --- Shutdown hooks ---
+@app.on_shutdown
+async def shutdown_first(logger: Logger):
+    logger.info("shutdown_first called")
 
-@app.on_startup
-async def second_start(logger: Logger):
-    logger.info("second_start called")
+@app.on_shutdown
+async def shutdown_second(logger: Logger):
+    logger.info("shutdown_second called")
 
+# --- After shutdown hooks ---
+@app.after_shutdown
+async def after_shutdown(logger: Logger):
+    logger.info("after_shutdown called")
 ```
 
 **Console output:**
 
 ```
-first_start called
-second_start called
+startup_first called
+startup_second called
 after_startup called
+shutdown_first called
+shutdown_second called
+after_shutdown called
 ```
 
 
