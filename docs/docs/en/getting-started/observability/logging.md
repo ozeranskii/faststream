@@ -12,7 +12,7 @@ search:
 
 ## Logging Requests
 
-To log requests, it is strongly recommended to use the `access_logger` of your broker, as it is available from the [Context](../getting-started/context/existed.md){.internal-link} of your application.
+To log requests, it is strongly recommended to use the `access_logger` of your broker, as it is available from the [Context](../getting-started/context.md){.internal-link} of your application.
 
 ```python
 from faststream import Logger
