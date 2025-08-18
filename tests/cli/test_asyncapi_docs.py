@@ -210,10 +210,13 @@ def test_serve_asyncapi_docs_from_app(
         generate_template(app_code) as app_path,
         faststream_cli("faststream", "docs", "serve", f"{app_path.stem}:app") as cli,
     ):
-        time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
-        response = httpx.get("http://localhost:8000")
+        try:
+            response = httpx.get("http://localhost:8000")
+        except Exception as e:
+            raise RuntimeError(cli.stderr) from e
+
         assert "<title>FastStream AsyncAPI</title>" in response.text
         assert response.status_code == 200
 
@@ -242,6 +245,10 @@ def test_serve_asyncapi_docs_from_file(
         time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
-        response = httpx.get("http://localhost:8000")
+        try:
+            response = httpx.get("http://localhost:8000")
+        except Exception as e:
+            raise RuntimeError(cli.stderr) from e
+
         assert "<title>FastStream AsyncAPI</title>" in response.text
         assert response.status_code == 200
