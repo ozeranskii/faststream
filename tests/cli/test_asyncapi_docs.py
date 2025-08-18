@@ -1,6 +1,6 @@
 import json
-from collections.abc import Callable
 import time
+from collections.abc import Callable
 from typing import Any, TextIO
 
 import httpx
@@ -208,12 +208,14 @@ def test_serve_asyncapi_docs_from_app(
 ) -> None:
     with (
         generate_template(app_code) as app_path,
-        faststream_cli("faststream", "docs", "serve", f"{app_path.stem}:app") as cli,
+        faststream_cli(
+            "faststream", "docs", "serve", "--host", "0.0.0.0", f"{app_path.stem}:app"
+        ) as cli,
     ):
         cli.wait_for_stderr("Please, do not use it in production.")
 
         try:
-            response = httpx.get("http://localhost:8000")
+            response = httpx.get("http://0.0.0.0:8000")
         except Exception as e:
             raise RuntimeError(cli.stderr) from e
 
@@ -240,13 +242,15 @@ def test_serve_asyncapi_docs_from_file(
 ) -> None:
     with (
         generate_template(doc, filename=doc_filename) as doc_path,
-        faststream_cli("faststream", "docs", "serve", str(doc_path)) as cli,
+        faststream_cli(
+            "faststream", "docs", "serve", "--host", "0.0.0.0", str(doc_path)
+        ) as cli,
     ):
         time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
         try:
-            response = httpx.get("http://localhost:8000")
+            response = httpx.get("http://0.0.0.0:8000")
         except Exception as e:
             raise RuntimeError(cli.stderr) from e
 
