@@ -1,5 +1,6 @@
 import json
 from collections.abc import Callable
+import time
 from typing import Any, TextIO
 
 import httpx
@@ -197,9 +198,9 @@ def test_gen_wrong_path(faststream_cli: FastStreamCLIFactory) -> None:
         assert cli.wait_for_stderr("No such file or directory")
 
 
-@pytest.mark.slow()
 @skip_windows
 @require_aiokafka
+@pytest.mark.slow()
 @pytest.mark.flaky(reruns=3, reruns_delay=1)
 def test_serve_asyncapi_docs_from_app(
     generate_template: GenerateTemplateFactory,
@@ -209,6 +210,7 @@ def test_serve_asyncapi_docs_from_app(
         generate_template(app_code) as app_path,
         faststream_cli("faststream", "docs", "serve", f"{app_path.stem}:app") as cli,
     ):
+        time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
         response = httpx.get("http://localhost:8000")
@@ -216,9 +218,9 @@ def test_serve_asyncapi_docs_from_app(
         assert response.status_code == 200
 
 
-@pytest.mark.slow()
 @skip_windows
 @require_aiokafka
+@pytest.mark.slow()
 @pytest.mark.flaky(reruns=3, reruns_delay=1)
 @pytest.mark.parametrize(
     ("doc_filename", "doc"),
@@ -237,6 +239,7 @@ def test_serve_asyncapi_docs_from_file(
         generate_template(doc, filename=doc_filename) as doc_path,
         faststream_cli("faststream", "docs", "serve", str(doc_path)) as cli,
     ):
+        time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
         response = httpx.get("http://localhost:8000")
