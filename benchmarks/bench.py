@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 "FastStream Version",
                 "Broker",
                 "Total Events",
-                "Event per second"
+                "Event per second",
                 "Elapsed Time",
                 "Measure Time",
                 "Python Version",
