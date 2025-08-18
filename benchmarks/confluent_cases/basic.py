@@ -18,7 +18,9 @@ class ConfluentTestCase:
         p = self.publisher = broker.publisher("in")
 
         @p
-        @broker.subscriber(partitions=[TopicPartition("in", 0)], auto_offset_reset="earliest")
+        @broker.subscriber(
+            partitions=[TopicPartition("in", 0)], auto_offset_reset="earliest"
+        )
         async def handle(message: Any) -> Any:
             self.EVENTS_PROCESSED += 1
             return message
