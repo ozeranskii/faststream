@@ -8,7 +8,7 @@ import pytest
 import yaml
 
 from tests.cli.conftest import FastStreamCLIFactory, GenerateTemplateFactory
-from tests.marks import require_aiokafka, skip_windows
+from tests.marks import require_aiokafka, skip_macos, skip_windows
 
 json_asyncapi_doc = """
 {
@@ -199,6 +199,7 @@ def test_gen_wrong_path(faststream_cli: FastStreamCLIFactory) -> None:
 
 
 @skip_windows
+@skip_macos
 @require_aiokafka
 @pytest.mark.slow()
 @pytest.mark.flaky(reruns=3, reruns_delay=1)
@@ -224,6 +225,7 @@ def test_serve_asyncapi_docs_from_app(
 
 
 @skip_windows
+@skip_macos
 @require_aiokafka
 @pytest.mark.slow()
 @pytest.mark.flaky(reruns=3, reruns_delay=1)
