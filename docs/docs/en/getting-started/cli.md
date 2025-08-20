@@ -41,11 +41,11 @@ faststream publish main:app '{"name": "John"}' --subject 'my-subject'
 The primary command to launch a **FastStream** application `faststream run`.
 This command supports a variety of options to customize your application runtime:
 
-* [Scaling](./#scaling){.internal-link}
-* [ASGI Support](./#asgi-support){.internal-link}
-* [Extra options](./#extra-options){.internal-link}
-* [Environment Management](./#environment-management){.internal-link}
-* [Logging Configuration](./#logging-configuration){.internal-link}
+* [Scaling](.#scaling){.internal-link}
+* [ASGI Support](.#asgi-support){.internal-link}
+* [Extra options](.#extra-options){.internal-link}
+* [Environment Management](.#environment-management){.internal-link}
+* [Logging Configuration](.#logging-configuration){.internal-link}
 
 ### Scaling
 
@@ -128,4 +128,4 @@ All passed values can be of type `#!python bool`, `#!python str` or `#!python li
 
 ### Logging Configuration
 
-You can pass any custom flags for logging configuration, it's `--log-level` or `--log-config` for detailed logging configuration. See [here](../observability/logging/#logging-levels){.internal-link}
+You can pass any custom flags for logging configuration, it's `--log-level` or `--log-config` for detailed logging configuration. See [here](../observability/logging#logging-levels){.internal-link}
