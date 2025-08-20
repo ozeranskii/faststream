@@ -1,5 +1,4 @@
 import json
-import time
 from collections.abc import Callable
 from typing import Any, TextIO
 
@@ -248,7 +247,6 @@ def test_serve_asyncapi_docs_from_file(
             "faststream", "docs", "serve", "--host", "0.0.0.0", str(doc_path)
         ) as cli,
     ):
-        time.sleep(2)
         cli.wait_for_stderr("Please, do not use it in production.")
 
         try:
