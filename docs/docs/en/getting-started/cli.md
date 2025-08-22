@@ -81,13 +81,13 @@ Extends reload option to also watch and reload on additional files (e.g., templa
 
 
 ```shell
-faststream run serve:app --reload
+faststream run main:app --reload
 ```
 
 By default **FastStream** watches for `.py` file changes, but you can specify an extra file extensions to watch by (your config files as an example)
 
 ```shell
-faststream run serve:app --reload  --reload-ext .yml --realod-ext .yaml
+faststream run main:app --reload  --reload-ext .yml --realod-ext .yaml
 ```
 
 ### Extra options
