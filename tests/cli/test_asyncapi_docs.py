@@ -144,6 +144,7 @@ async def on_input_data(msg: DataBasic, logger: Logger) -> DataBasic:
 
 @pytest.mark.slow()
 @require_aiokafka
+@skip_windows
 @pytest.mark.parametrize(
     ("commands", "load_schema"),
     (
@@ -192,6 +193,7 @@ def test_gen_asyncapi_for_kafka_app(
 
 
 @pytest.mark.slow()
+@skip_windows
 def test_gen_wrong_path(faststream_cli: FastStreamCLIFactory) -> None:
     with faststream_cli("faststream", "docs", "gen", "non_existent:app") as cli:
         assert cli.wait_for_stderr("No such file or directory")
