@@ -43,32 +43,37 @@ Lifespan hooks are called in a strict order following the application’s lifecy
 You can define multiple functions for a single hook — they will be executed in the order they were registered. The order in which different hooks are declared does not affect their execution: FastStream guarantees that hooks are called according to the lifecycle sequence, regardless of registration order.
 
 ```python
+import logging
+
+logger = logging.getLogger("faststream")
+
+
 # --- Startup hooks ---
 @app.on_startup
-async def startup_first(logger: Logger):
+async def startup_first():
     logger.info("startup_first called")
 
 @app.on_startup
-async def startup_second(logger: Logger):
+async def startup_second():
     logger.info("startup_second called")
 
 # --- After startup hooks ---
 @app.after_startup
-async def after_startup(logger: Logger):
+async def after_startup():
     logger.info("after_startup called")
 
 # --- Shutdown hooks ---
 @app.on_shutdown
-async def shutdown_first(logger: Logger):
+async def shutdown_first():
     logger.info("shutdown_first called")
 
 @app.on_shutdown
-async def shutdown_second(logger: Logger):
+async def shutdown_second():
     logger.info("shutdown_second called")
 
 # --- After shutdown hooks ---
 @app.after_shutdown
-async def after_shutdown(logger: Logger):
+async def after_shutdown():
     logger.info("after_shutdown called")
 ```
 
