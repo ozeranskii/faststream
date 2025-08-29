@@ -49,19 +49,19 @@ logger = logging.getLogger("faststream")
 
 
 @app.on_startup
-async def startup_first():
+async def startup_hook():
     logger.info("on_startup called")
 
 @app.after_startup
-async def after_startup():
+async def after_startup_hook():
     logger.info("after_startup called")
 
 @app.on_shutdown
-async def shutdown_first():
+async def shutdown_hook():
     logger.info("on_shutdown called")
 
 @app.after_shutdown
-async def after_shutdown():
+async def after_shutdown_hook():
     logger.info("after_shutdown called")
 ```
 
