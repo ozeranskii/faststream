@@ -48,30 +48,18 @@ import logging
 logger = logging.getLogger("faststream")
 
 
-# --- Startup hooks ---
 @app.on_startup
 async def startup_first():
-    logger.info("startup_first called")
+    logger.info("on_startup called")
 
-@app.on_startup
-async def startup_second():
-    logger.info("startup_second called")
-
-# --- After startup hooks ---
 @app.after_startup
 async def after_startup():
     logger.info("after_startup called")
 
-# --- Shutdown hooks ---
 @app.on_shutdown
 async def shutdown_first():
-    logger.info("shutdown_first called")
+    logger.info("on_shutdown called")
 
-@app.on_shutdown
-async def shutdown_second():
-    logger.info("shutdown_second called")
-
-# --- After shutdown hooks ---
 @app.after_shutdown
 async def after_shutdown():
     logger.info("after_shutdown called")
@@ -80,11 +68,9 @@ async def after_shutdown():
 **Console output:**
 
 ```
-startup_first called
-startup_second called
+on_startup called
 after_startup called
-shutdown_first called
-shutdown_second called
+on_shutdown called
 after_shutdown called
 ```
 
