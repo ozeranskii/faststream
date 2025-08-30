@@ -77,7 +77,8 @@ after_shutdown called
 
 This allows you to safely separate logic and resource initialization across different functions and hooks without worrying about the order of registration.
 
-
+!!! note ""
+   You can also specify multiple hooks. All your registered hooks will be added to a list and executed.
 
 ## Usage example
 
