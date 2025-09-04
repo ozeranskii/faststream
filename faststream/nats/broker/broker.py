@@ -64,12 +64,10 @@ if TYPE_CHECKING:
     from nats.js.object_store import ObjectStore
     from typing_extensions import TypedDict
 
-    from faststream._internal.basic_types import (
-        LoggerProto,
-        SendableMessage,
-    )
+    from faststream._internal.basic_types import LoggerProto, SendableMessage
     from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import BrokerMiddleware, CustomCallable
+    from faststream.nats.configs.broker import JsInitOptions
     from faststream.nats.helpers import KVBucketDeclarer, OSBucketDeclarer
     from faststream.nats.message import NatsMessage
     from faststream.nats.schemas import PubAck
@@ -348,6 +346,10 @@ class NatsBroker(
             float | None,
             Doc("Max duration to wait for a forced flush to occur."),
         ] = None,
+        js_options: Annotated[
+            Union["JsInitOptions", dict[str, Any], None],
+            Doc("JetStream initialization options."),
+        ] = None,
         # broker args
         graceful_timeout: Annotated[
             float | None,
@@ -480,6 +482,7 @@ class NatsBroker(
             config=NatsBrokerConfig(
                 producer=producer,
                 js_producer=js_producer,
+                js_options=js_options or {},
                 # both args
                 broker_middlewares=middlewares,
                 broker_parser=parser,
