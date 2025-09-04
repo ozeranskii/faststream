@@ -11,6 +11,7 @@ from typing import (
 
 import anyio
 import nats
+from fast_depends import Provider, dependency_provider
 from nats.aio.client import (
     DEFAULT_CONNECT_TIMEOUT,
     DEFAULT_DRAIN_TIMEOUT,
@@ -31,6 +32,7 @@ from typing_extensions import Doc, deprecated, overload, override
 from faststream.__about__ import SERVICE_NAME
 from faststream._internal.broker import BrokerUsecase
 from faststream._internal.constants import EMPTY
+from faststream._internal.context.repository import ContextRepo
 from faststream._internal.di import FastDependsConfig
 from faststream.message import gen_cor_id
 from faststream.nats.configs import NatsBrokerConfig
@@ -419,6 +421,8 @@ class NatsBroker(
             Doc("Whether to use FastDepends or not."),
         ] = True,
         serializer: Optional["SerializerProto"] = EMPTY,
+        provider: Optional["Provider"] = None,
+        context: Optional["ContextRepo"] = None,
     ) -> None:
         """Initialize the NatsBroker object."""
         secure_kwargs = parse_security(security)
@@ -494,6 +498,8 @@ class NatsBroker(
                 fd_config=FastDependsConfig(
                     use_fastdepends=apply_types,
                     serializer=serializer,
+                    provider=provider or dependency_provider,
+                    context=context or ContextRepo(),
                 ),
                 # subscriber args
                 broker_dependencies=dependencies,
