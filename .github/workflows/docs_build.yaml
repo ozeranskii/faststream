@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
+        with:  # zizmor: ignore[artipacked]
           fetch-depth: 0
-          persist-credentials: false
+          token: ${{ secrets.AUTOMERGE_TOKEN }}
       - uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6.6.1
         with:
           version: "latest"
@@ -46,11 +46,6 @@ jobs:
       - run: echo $VERSION
       - run: echo $IS_RC
 
-      - name: Configure Git user
-        run: |
-          git config --local user.email "faststream-actions[bot]@users.noreply.github.com"
-          git config --local user.name "faststream-actions[bot]"
-
       - name: Build docs
         run: |
           if [ "$IS_RC" == "False" ]; then
@@ -76,6 +71,3 @@ jobs:
           branch: gh-pages
           push_options: "--force"  # force push to stay with clear gh-pages branch history
           commit_message: "docs: deploy docs"
-          commit_user_name: faststream-actions[bot]
-          commit_user_email: faststream-actions[bot]@users.noreply.github.com
-          commit_author: faststream-actions[bot] <faststream-actions[bot]@users.noreply.github.com>
