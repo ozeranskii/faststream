@@ -45,11 +45,15 @@ class TaskCallbackSupervisor:
         return bool(int(os.getenv("FASTSTREAM_SUPERVISOR_DISABLED", "0")))
 
     def __call__(self, task: Task[Any]) -> None:
+        logger.info(f"callback for {task.get_name()} is being executed...")
         if task.cancelled() or self.is_disabled:
             return
 
         if (exc := task.exception()) and not isinstance(exc, self.ignored_exceptions):
             logger.error(
-                f"{task.get_name()} raised an exception, retrying...", exc_info=exc
+                f"{task.get_name()} raised an exception, retrying...\n"
+                "If this behavior causes issues, you can disable it via setting the FASTSTREAM_SUPERVISOR_DISABLED env to 1. "
+                "Also, please consider opening issue on the repository: https://github.com/ag2ai/faststream.",
+                exc_info=exc,
             )
             self.subscriber.add_task(self.func, self.args, self.kwargs)
