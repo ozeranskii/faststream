@@ -11,9 +11,6 @@ if TYPE_CHECKING:
 
     from faststream._internal.endpoint.subscriber.mixins import TasksMixin
 
-# stores how many times each coroutine has been retried
-_attempts_counter: dict[Callable[..., Coroutine[Any, Any, Any]], int] = {}
-
 
 class TaskCallbackSupervisor:
     """Supervisor for asyncio.Task spawned in TaskMixin implemented via task callback."""
@@ -34,26 +31,18 @@ class TaskCallbackSupervisor:
         func_kwargs: dict[str, Any] | None,
         subscriber: TasksMixin,
         *,
-        max_attempts: int = 3,
         ignored_exceptions: tuple[type[BaseException], ...] = (CancelledError,),
     ) -> None:
         self.subscriber = subscriber
         self.func = func
         self.args = func_args or ()
         self.kwargs = func_kwargs or {}
-        self.max_attempts = max_attempts
         self.ignored_exceptions = ignored_exceptions
 
     @property
     def is_disabled(self) -> bool:
         # supervisor can affect some test cases, so it might be useful to have global killswitch.
         return bool(int(os.getenv("FASTSTREAM_SUPERVISOR_DISABLED", "0")))
-
-    def _register_task(self) -> None:
-        attempts = _attempts_counter.get(self.func, 1)
-        if attempts < self.max_attempts:
-            self.subscriber.add_task(self.func, self.args, self.kwargs)
-            _attempts_counter[self.func] = attempts + 1
 
     def __call__(self, task: Task[Any]) -> None:
         if task.cancelled() or self.is_disabled:
@@ -63,4 +52,4 @@ class TaskCallbackSupervisor:
             logger.error(
                 f"{task.get_name()} raised an exception, retrying...", exc_info=exc
             )
-            self._register_task()
+            self.subscriber.add_task(self.func, self.args, self.kwargs)
