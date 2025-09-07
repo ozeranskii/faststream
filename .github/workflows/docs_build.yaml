@@ -46,6 +46,11 @@ jobs:
       - run: echo $VERSION
       - run: echo $IS_RC
 
+      - name: Configure Git user
+        run: |
+          git config --local user.email "faststream-actions[bot]@users.noreply.github.com"
+          git config --local user.name "faststream-actions[bot]"
+
       - name: Build docs
         run: |
           if [ "$IS_RC" == "False" ]; then
@@ -71,3 +76,6 @@ jobs:
           branch: gh-pages
           push_options: "--force"  # force push to stay with clear gh-pages branch history
           commit_message: "docs: deploy docs"
+          commit_user_name: faststream-actions[bot]
+          commit_user_email: faststream-actions[bot]@users.noreply.github.com
+          commit_author: faststream-actions[bot] <faststream-actions[bot]@users.noreply.github.com>
