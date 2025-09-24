@@ -32,10 +32,9 @@ def get_mock_app(broker_type: Any, producer_type: Any) -> tuple[FastStream, Asyn
     mock_producer._parser = MagicMock(return_value=None)
     mock_producer._decoder = MagicMock(return_value=None)
     broker.config.broker_config.producer = mock_producer
-    
 
     broker.config.broker_config.broker_decoder = MagicMock(return_value=None)
-    
+
     return FastStream(broker), mock_producer
 
 
