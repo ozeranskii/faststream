@@ -104,15 +104,13 @@ class AsgiFastStream(Application):
         asyncapi_path: str | AsyncAPIRoute | None = None,
     ) -> None:
         self.routes = list(asgi_routes)
-        context = context or ContextRepo()
-        context.set_global("app", self)
 
         super().__init__(
             broker,
             logger=logger,
             config=FastDependsConfig(
                 provider=provider or dependency_provider,
-                context=context,
+                context=context or ContextRepo(),
                 serializer=serializer,
             ),
             lifespan=lifespan,
