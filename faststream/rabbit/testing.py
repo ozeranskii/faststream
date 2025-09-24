@@ -35,6 +35,8 @@ if TYPE_CHECKING:
 
 __all__ = ("TestRabbitBroker",)
 
+TEST_SUBSCRIBER_NAME = "__TEST_SUBSCRIBER__%d__"
+
 
 class TestRabbitBroker(TestBroker[RabbitBroker]):
     """A class to test RabbitMQ brokers."""
@@ -90,7 +92,7 @@ class TestRabbitBroker(TestBroker[RabbitBroker]):
         if sub is None:
             is_real = False
             sub = broker.subscriber(
-                queue=publisher.routing(),
+                queue=publisher.routing() or TEST_SUBSCRIBER_NAME.format(hash(publisher)),
                 exchange=publisher.exchange,
             )
         else:
@@ -291,6 +293,9 @@ def _is_handler_matches(
 
     if handler.exchange != exchange:
         return False
+
+    if handler.routing() == TEST_SUBSCRIBER_NAME.format(hash(handler)):
+        return True
 
     if handler.exchange is None or handler.exchange.type == ExchangeType.DIRECT:
         return handler.routing() == routing_key
