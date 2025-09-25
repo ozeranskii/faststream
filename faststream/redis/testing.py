@@ -133,8 +133,8 @@ class FakeProducer(RedisFastProducer):
             reply_to=cmd.reply_to,
             correlation_id=cmd.correlation_id or gen_cor_id(),
             headers=cmd.headers,
-            serializer=self.broker.config.fd_config._serializer,
             message_format=cmd.message_format,
+            serializer=self.broker.config.fd_config._serializer,
         )
 
         destination = _make_destination_kwargs(cmd)
@@ -161,6 +161,7 @@ class FakeProducer(RedisFastProducer):
             correlation_id=cmd.correlation_id or gen_cor_id(),
             headers=cmd.headers,
             message_format=cmd.message_format,
+            serializer=self.broker.config.fd_config._serializer,
         )
 
         destination = _make_destination_kwargs(cmd)
@@ -189,6 +190,7 @@ class FakeProducer(RedisFastProducer):
                 correlation_id=cmd.correlation_id or gen_cor_id(),
                 headers=cmd.headers,
                 message_format=cmd.message_format,
+                serializer=self.broker.config.fd_config._serializer,
             )
             for m in cmd.batch_bodies
         ]
