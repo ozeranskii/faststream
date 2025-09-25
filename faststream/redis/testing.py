@@ -161,6 +161,7 @@ class FakeProducer(RedisFastProducer):
             correlation_id=cmd.correlation_id or gen_cor_id(),
             headers=cmd.headers,
             message_format=cmd.message_format,
+            serializer=self.broker.config.fd_config._serializer,
         )
 
         destination = _make_destination_kwargs(cmd)
