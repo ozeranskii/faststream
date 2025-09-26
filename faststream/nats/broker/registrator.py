@@ -832,6 +832,7 @@ class NatsRegistrator(Registrator[Msg, NatsBrokerConfig]):
             schema: AsyncAPI publishing message type.
                 Should be any python-native object annotation or `pydantic.BaseModel`.
             include_in_schema: Whetever to include operation in AsyncAPI schema or not.
+            persistent: Whether to make the publisher persistent or not.
         """
         stream = self._stream_builder.create(stream)
 
