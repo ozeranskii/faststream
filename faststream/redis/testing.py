@@ -83,7 +83,10 @@ class TestRedisBroker(TestBroker[RedisBroker]):
 
         if sub is None:
             is_real = False
-            sub = broker.subscriber(**publisher.subscriber_property(name_only=False))
+            sub = broker.subscriber(
+                **publisher.subscriber_property(name_only=False),
+                persistent=False,
+            )
 
         else:
             is_real = True
