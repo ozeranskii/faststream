@@ -80,7 +80,7 @@ class TestTestclient(NatsMemoryTestcaseConfig, BrokerTestclientTestcase):
             assert br._connection._inbox_prefix == b"test"
             assert "test" in str(br._connection.new_inbox())
 
-    async def test_respect_middleware(self, queue) -> None:
+    async def test_respect_middleware(self, queue: str) -> None:
         routes = []
 
         class Middleware(BaseMiddleware):
@@ -103,7 +103,7 @@ class TestTestclient(NatsMemoryTestcaseConfig, BrokerTestclientTestcase):
         assert len(routes) == 2
 
     @pytest.mark.connected()
-    async def test_real_respect_middleware(self, queue) -> None:
+    async def test_real_respect_middleware(self, queue: str) -> None:
         routes = []
 
         class Middleware(BaseMiddleware):
@@ -223,10 +223,7 @@ class TestTestclient(NatsMemoryTestcaseConfig, BrokerTestclientTestcase):
             await br.publish("hello", queue)
             subscriber.mock.assert_called_once_with(["hello"])
 
-    async def test_consume_with_filter(
-        self,
-        queue,
-    ) -> None:
+    async def test_consume_with_subject_filter(self, queue: str) -> None:
         broker = self.get_broker()
 
         @broker.subscriber(
