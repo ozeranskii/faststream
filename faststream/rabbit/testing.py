@@ -92,7 +92,7 @@ class TestRabbitBroker(TestBroker[RabbitBroker]):
         if sub is None:
             is_real = False
             sub = broker.subscriber(
-                queue=publisher.routing() or TEST_SUBSCRIBER_NAME.format(hash(publisher)),
+                queue=publisher.routing() or TEST_SUBSCRIBER_NAME % hash(publisher),
                 exchange=publisher.exchange,
             )
         else:
@@ -294,7 +294,7 @@ def _is_handler_matches(
     if handler.exchange != exchange:
         return False
 
-    if handler.routing() == TEST_SUBSCRIBER_NAME.format(hash(handler)):
+    if handler.routing() == TEST_SUBSCRIBER_NAME % hash(handler):
         return True
 
     if handler.exchange is None or handler.exchange.type == ExchangeType.DIRECT:
