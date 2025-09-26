@@ -252,3 +252,12 @@ class TestTestclient(NatsMemoryTestcaseConfig, BrokerTestclientTestcase):
         queue: str,
     ) -> None:
         await super().test_broker_with_real_patches_publishers_and_subscribers(queue)
+
+    async def test_publisher_without_subject(self) -> None:
+        """Fixes https://github.com/ag2ai/faststream/issues/2513."""
+        broker = self.get_broker()
+        publisher = broker.publisher(subject="")
+
+        async with self.patch_broker(broker):
+            await publisher.publish(None, subject="new-key")
+            publisher.mock.assert_called_once()
