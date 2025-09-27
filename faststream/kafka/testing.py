@@ -81,11 +81,13 @@ class TestKafkaBroker(TestBroker[KafkaBroker]):
                 sub = broker.subscriber(
                     partitions=[tp],
                     batch=isinstance(publisher, BatchPublisher),
+                    persistent=False,
                 )
             else:
                 sub = broker.subscriber(
                     publisher.topic,
                     batch=isinstance(publisher, BatchPublisher),
+                    persistent=False,
                 )
         else:
             is_real = True
