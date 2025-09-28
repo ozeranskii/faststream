@@ -3,7 +3,7 @@ import asyncio
 from confluent_kafka import Message
 from typing_extensions import assert_type
 
-from faststream.confluent import KafkaBroker, KafkaMessage
+from faststream.confluent import KafkaBroker, KafkaMessage, KafkaRouter
 from faststream.confluent.fastapi import KafkaRouter as FastAPIRouter
 from faststream.confluent.publisher.usecase import (
     BatchPublisher,
@@ -14,6 +14,12 @@ from faststream.confluent.subscriber.usecase import (
     ConcurrentDefaultSubscriber,
     DefaultSubscriber,
 )
+
+router = KafkaRouter()
+
+b = KafkaBroker(routers=[router])
+b.include_router(router)
+b.include_routers(router)
 
 
 async def check_response_type() -> None:

@@ -140,6 +140,10 @@ KafkaRouter(
 
 router = KafkaRouter()
 
+b = KafkaBroker(routers=[router])
+b.include_router(router)
+b.include_routers(router)
+
 router_sub = router.subscriber("test")
 
 
