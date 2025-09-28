@@ -28,8 +28,6 @@ if TYPE_CHECKING:
 
 __all__ = ("TestNatsBroker",)
 
-TEST_SUBSCRIBER_NAME = "__TEST_SUBSCRIBER__%d__"
-
 
 @contextmanager
 def change_producer(
@@ -69,7 +67,7 @@ class TestNatsBroker(TestBroker[NatsBroker]):
         if sub is None:
             is_real = False
             sub = broker.subscriber(
-                publisher.subject or TEST_SUBSCRIBER_NAME % hash(publisher),
+                publisher.subject or _get_publisher_sub_name(publisher),
                 persistent=False,
             )
             sub._original_publisher__ = publisher  # type: ignore[attr-defined]
@@ -200,7 +198,7 @@ def _is_handler_matches(
     stream: str | None = None,
 ) -> bool:
     if (publisher := getattr(handler, "_original_publisher__", None)) and (
-        handler.subject == TEST_SUBSCRIBER_NAME % hash(publisher)
+        handler.subject == _get_publisher_sub_name(publisher)
     ):
         return True
 
@@ -262,3 +260,7 @@ class PatchedMessage(Msg):
 
     async def in_progress(self) -> None:
         pass
+
+
+def _get_publisher_sub_name(publisher: "LogicPublisher") -> str:
+    return f"__TEST_SUBSCRIBER__{hash(publisher)}__"

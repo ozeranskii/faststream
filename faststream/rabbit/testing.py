@@ -35,8 +35,6 @@ if TYPE_CHECKING:
 
 __all__ = ("TestRabbitBroker",)
 
-TEST_SUBSCRIBER_NAME = "__TEST_SUBSCRIBER__%d__"
-
 
 class TestRabbitBroker(TestBroker[RabbitBroker]):
     """A class to test RabbitMQ brokers."""
@@ -92,7 +90,7 @@ class TestRabbitBroker(TestBroker[RabbitBroker]):
         if sub is None:
             is_real = False
             sub = broker.subscriber(
-                queue=publisher.routing() or TEST_SUBSCRIBER_NAME % hash(publisher),
+                queue=publisher.routing() or _get_publisher_sub_name(publisher),
                 exchange=publisher.exchange,
                 persistent=False,
             )
@@ -297,7 +295,7 @@ def _is_handler_matches(
         return False
 
     if (publisher := getattr(handler, "_original_publisher__", None)) and (
-        handler.routing() == TEST_SUBSCRIBER_NAME % hash(publisher)
+        handler.routing() == _get_publisher_sub_name(publisher)
     ):
         return True
 
@@ -371,3 +369,7 @@ def apply_pattern(pattern: str, current: str) -> bool:
             return False
 
     return next(current_queue, None) is None
+
+
+def _get_publisher_sub_name(publisher: "RabbitPublisher") -> str:
+    return f"__TEST_SUBSCRIBER__{hash(publisher)}__"

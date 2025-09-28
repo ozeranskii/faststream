@@ -29,8 +29,6 @@ if TYPE_CHECKING:
 
 __all__ = ("TestKafkaBroker",)
 
-TEST_SUBSCRIBER_NAME = "__TEST_SUBSCRIBER__%d__"
-
 
 class TestKafkaBroker(TestBroker[KafkaBroker]):
     """A class to test Kafka brokers."""
@@ -73,7 +71,7 @@ class TestKafkaBroker(TestBroker[KafkaBroker]):
         if sub is None:
             is_real = False
 
-            topic_name = publisher.topic or TEST_SUBSCRIBER_NAME % hash(publisher)
+            topic_name = publisher.topic or _get_publisher_sub_name(publisher)
 
             if publisher.partition:
                 tp = TopicPartition(
@@ -340,7 +338,7 @@ def _is_handler_matches(
         return True
 
     if publisher := getattr(handler, "_original_publisher__", None):
-        return _try_match_publisher(handler, TEST_SUBSCRIBER_NAME % hash(publisher), None)
+        return _try_match_publisher(handler, _get_publisher_sub_name(publisher), None)
 
     return False
 
@@ -357,3 +355,7 @@ def _try_match_publisher(
         )
         or topic in handler.topics,
     )
+
+
+def _get_publisher_sub_name(publisher: "LogicPublisher") -> str:
+    return f"__TEST_SUBSCRIBER__{hash(publisher)}__"

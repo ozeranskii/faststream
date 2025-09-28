@@ -44,8 +44,6 @@ if TYPE_CHECKING:
 
 __all__ = ("TestRedisBroker",)
 
-TEST_SUBSCRIBER_NAME = "__TEST_SUBSCRIBER__%d__"
-
 
 class TestRedisBroker(TestBroker[RedisBroker]):
     """A class to test Redis brokers."""
@@ -96,7 +94,7 @@ class TestRedisBroker(TestBroker[RedisBroker]):
                 sub_options = {}
                 for key, value in publisher_property.items():
                     if value is not None:
-                        sub_options[key] = TEST_SUBSCRIBER_NAME % hash(publisher)
+                        sub_options[key] = _get_publisher_sub_name(publisher)
 
             sub = broker.subscriber(**sub_options, persistent=False)
             sub._original_publisher__ = publisher  # type: ignore[union-attr]
@@ -294,7 +292,7 @@ class ChannelVisitor(Visitor):
         sub_channel = sub.channel
 
         if (publisher := getattr(sub, "_original_publisher__", None)) and (
-            sub_channel.name == TEST_SUBSCRIBER_NAME % hash(publisher)
+            sub_channel.name == _get_publisher_sub_name(publisher)
         ):
             return channel
 
@@ -338,7 +336,7 @@ class ListVisitor(Visitor):
             return None
 
         if (publisher := getattr(sub, "_original_publisher__", None)) and (
-            sub.list_sub.name == TEST_SUBSCRIBER_NAME % hash(publisher)
+            sub.list_sub.name == _get_publisher_sub_name(publisher)
         ):
             return list
 
@@ -380,7 +378,7 @@ class StreamVisitor(Visitor):
             return None
 
         if (publisher := getattr(sub, "_original_publisher__", None)) and (
-            sub.stream_sub.name == TEST_SUBSCRIBER_NAME % hash(publisher)
+            sub.stream_sub.name == _get_publisher_sub_name(publisher)
         ):
             return stream
 
@@ -430,3 +428,7 @@ def _make_destination_kwargs(cmd: RedisPublishCommand) -> _DestinationKwargs:
         raise SetupError(INCORRECT_SETUP_MSG)
 
     return destination
+
+
+def _get_publisher_sub_name(publisher: "LogicPublisher") -> str:
+    return f"__TEST_SUBSCRIBER__{hash(publisher)}__"
