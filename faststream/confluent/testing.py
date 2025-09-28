@@ -80,12 +80,14 @@ class TestKafkaBroker(TestBroker[KafkaBroker]):
                     partitions=[tp],
                     batch=isinstance(publisher, BatchPublisher),
                     auto_offset_reset="earliest",
+                    persistent=False,
                 )
             else:
                 sub = broker.subscriber(
                     publisher.topic,
                     batch=isinstance(publisher, BatchPublisher),
                     auto_offset_reset="earliest",
+                    persistent=False,
                 )
 
         else:
