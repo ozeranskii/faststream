@@ -9,9 +9,8 @@ from tests.marks import (
 )
 
 
-@pytest.mark.kafka()
-@pytest.mark.connected()
 @pytest.mark.asyncio()
+@pytest.mark.kafka()
 @require_aiokafka
 async def test_handle_kafka() -> None:
     from docs.docs_src.getting_started.subscription.kafka.full_testing import (
@@ -21,9 +20,8 @@ async def test_handle_kafka() -> None:
     await test_handle_k()
 
 
-@pytest.mark.connected()
-@pytest.mark.confluent()
 @pytest.mark.asyncio()
+@pytest.mark.confluent()
 @require_confluent
 async def test_handle_confluent() -> None:
     from docs.docs_src.getting_started.subscription.confluent.full_testing import (
@@ -33,7 +31,6 @@ async def test_handle_confluent() -> None:
     await test_handle_confluent()
 
 
-@pytest.mark.connected()
 @pytest.mark.asyncio()
 @pytest.mark.rabbit()
 @require_aiopika
@@ -45,7 +42,6 @@ async def test_handle_rabbit() -> None:
     await test_handle_r()
 
 
-@pytest.mark.connected()
 @pytest.mark.asyncio()
 @pytest.mark.nats()
 @require_nats
@@ -57,7 +53,6 @@ async def test_handle_nats() -> None:
     await test_handle_n()
 
 
-@pytest.mark.connected()
 @pytest.mark.asyncio()
 @pytest.mark.redis()
 @require_redis
