@@ -1,12 +1,7 @@
 from collections.abc import Awaitable, Callable, Iterable, Sequence
-from typing import (
-    TYPE_CHECKING,
-    Annotated,
-    Any,
-    Optional,
-    Union,
-)
+from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
 
+from nats.aio.msg import Msg
 from nats.js import api
 from typing_extensions import Doc, deprecated
 
@@ -23,10 +18,8 @@ from .registrator import NatsRegistrator
 
 if TYPE_CHECKING:
     from fast_depends.dependencies import Dependant
-    from nats.aio.msg import Msg
 
     from faststream._internal.basic_types import SendableMessage
-    from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import (
         BrokerMiddleware,
         CustomCallable,
@@ -330,10 +323,7 @@ class NatsRoute(SubscriberRoute):
         )
 
 
-class NatsRouter(
-    NatsRegistrator,
-    BrokerRouter["Msg"],
-):
+class NatsRouter(NatsRegistrator, BrokerRouter[Msg]):
     """Includable to NatsBroker router."""
 
     def __init__(
@@ -358,7 +348,7 @@ class NatsRouter(
             Doc("Router middlewares to apply to all routers' publishers/subscribers."),
         ] = (),
         routers: Annotated[
-            Sequence["Registrator[Msg]"],
+            Iterable[NatsRegistrator],
             Doc("Routers to apply to broker."),
         ] = (),
         parser: Annotated[

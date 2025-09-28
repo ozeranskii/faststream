@@ -67,7 +67,6 @@ if TYPE_CHECKING:
     from typing_extensions import TypedDict
 
     from faststream._internal.basic_types import LoggerProto, SendableMessage
-    from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import BrokerMiddleware, CustomCallable
     from faststream.nats.configs.broker import JsInitOptions
     from faststream.nats.helpers import KVBucketDeclarer, OSBucketDeclarer
@@ -376,7 +375,7 @@ class NatsBroker(
             Doc("Middlewares to apply to all broker publishers/subscribers."),
         ] = (),
         routers: Annotated[
-            Sequence["Registrator[Msg]"],
+            Iterable[NatsRegistrator],
             Doc("Routers to apply to broker."),
         ] = (),
         # AsyncAPI args

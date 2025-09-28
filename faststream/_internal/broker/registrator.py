@@ -23,7 +23,7 @@ class Registrator(Generic[MsgType, BrokerConfigType]):
         self,
         *,
         config: BrokerConfigType,
-        routers: Sequence["Registrator[MsgType]"],
+        routers: Iterable["Registrator[MsgType]"],
     ) -> None:
         self._parser = config.broker_parser
         self._decoder = config.broker_decoder
