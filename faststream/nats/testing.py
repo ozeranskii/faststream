@@ -69,7 +69,7 @@ class TestNatsBroker(TestBroker[NatsBroker]):
         if sub is None:
             is_real = False
             sub = broker.subscriber(
-                publisher.subject or TEST_SUBSCRIBER_NAME % hash(publisher)
+                publisher.subject or TEST_SUBSCRIBER_NAME % hash(publisher), persistent=False
             )
             sub._original_publisher__ = publisher  # type: ignore[attr-defined]
         else:

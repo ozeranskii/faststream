@@ -84,12 +84,14 @@ class TestKafkaBroker(TestBroker[KafkaBroker]):
                     partitions=[tp],
                     batch=isinstance(publisher, BatchPublisher),
                     auto_offset_reset="earliest",
+                    persistent=False,
                 )
             else:
                 sub = broker.subscriber(
                     topic_name,
                     batch=isinstance(publisher, BatchPublisher),
                     auto_offset_reset="earliest",
+                    persistent=False,
                 )
             sub._original_publisher__ = publisher  # type: ignore[union-attr]
         else:

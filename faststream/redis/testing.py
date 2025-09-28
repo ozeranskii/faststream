@@ -98,7 +98,7 @@ class TestRedisBroker(TestBroker[RedisBroker]):
                     if value is not None:
                         sub_options[key] = TEST_SUBSCRIBER_NAME % hash(publisher)
 
-            sub = broker.subscriber(**sub_options)
+            sub = broker.subscriber(**sub_options, persistent=False)
             sub._original_publisher__ = publisher  # type: ignore[union-attr]
         else:
             is_real = True

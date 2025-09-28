@@ -94,6 +94,7 @@ class TestRabbitBroker(TestBroker[RabbitBroker]):
             sub = broker.subscriber(
                 queue=publisher.routing() or TEST_SUBSCRIBER_NAME % hash(publisher),
                 exchange=publisher.exchange,
+                persistent=False,
             )
             sub._original_publisher__ = publisher  # type: ignore[attr-defined]
         else:
