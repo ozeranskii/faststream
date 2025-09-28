@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from fast_depends.dependencies import Dependant
 
     from faststream._internal.basic_types import SendableMessage
-    from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import (
         BrokerMiddleware,
         CustomCallable,
@@ -213,7 +212,10 @@ class RedisRoute(SubscriberRoute):
         )
 
 
-class RedisRouter(RedisRegistrator, BrokerRouter[BaseMessage]):
+class RedisRouter(
+    RedisRegistrator,
+    BrokerRouter[BaseMessage],
+):
     """Includable to RedisBroker router."""
 
     def __init__(
@@ -238,7 +240,7 @@ class RedisRouter(RedisRegistrator, BrokerRouter[BaseMessage]):
             Doc("Router middlewares to apply to all routers' publishers/subscribers."),
         ] = (),
         routers: Annotated[
-            Sequence["Registrator[BaseMessage]"],
+            Iterable[RedisRegistrator],
             Doc("Routers to apply to broker."),
         ] = (),
         parser: Annotated[

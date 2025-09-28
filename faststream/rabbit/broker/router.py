@@ -1,6 +1,7 @@
 from collections.abc import Awaitable, Callable, Iterable, Sequence
 from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
 
+from aio_pika import IncomingMessage
 from typing_extensions import Doc, deprecated
 
 from faststream._internal.broker.router import (
@@ -16,10 +17,8 @@ from .registrator import RabbitRegistrator
 
 if TYPE_CHECKING:
     from aio_pika.abc import DateType, HeadersType, TimeoutType
-    from aio_pika.message import IncomingMessage
     from fast_depends.dependencies import Dependant
 
-    from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import (
         BrokerMiddleware,
         CustomCallable,
@@ -289,7 +288,7 @@ class RabbitRoute(SubscriberRoute):
         )
 
 
-class RabbitRouter(RabbitRegistrator, BrokerRouter["IncomingMessage"]):
+class RabbitRouter(RabbitRegistrator, BrokerRouter[IncomingMessage]):
     """Includable to RabbitBroker router."""
 
     def __init__(
@@ -314,7 +313,7 @@ class RabbitRouter(RabbitRegistrator, BrokerRouter["IncomingMessage"]):
             Doc("Router middlewares to apply to all routers' publishers/subscribers."),
         ] = (),
         routers: Annotated[
-            Sequence["Registrator[IncomingMessage]"],
+            Iterable[RabbitRegistrator],
             Doc("Routers to apply to broker."),
         ] = (),
         parser: Annotated[

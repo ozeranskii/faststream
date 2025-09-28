@@ -54,7 +54,6 @@ if TYPE_CHECKING:
     from typing_extensions import TypedDict
 
     from faststream._internal.basic_types import LoggerProto, SendableMessage
-    from faststream._internal.broker.registrator import Registrator
     from faststream._internal.types import BrokerMiddleware, CustomCallable
     from faststream.redis.message import RedisChannelMessage
     from faststream.security import BaseSecurity
@@ -136,7 +135,7 @@ class RedisBroker(
             Doc("Middlewares to apply to all broker publishers/subscribers."),
         ] = (),
         routers: Annotated[
-            Sequence["Registrator[UnifyRedisDict]"],
+            Iterable[RedisRegistrator],
             Doc("Routers to apply to broker."),
         ] = (),
         message_format: Annotated[
