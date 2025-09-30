@@ -198,6 +198,38 @@ class TestConsumeList(RedisTestcaseConfig):
         mock.assert_called_once_with(b"hello")
 
     @pytest.mark.slow()
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
+    async def test_consume_list_with_big_interval(
+        self,
+        queue: str,
+        mock: MagicMock,
+    ):
+        consume_broker = self.get_broker()
+
+        sub = consume_broker.subscriber(list=ListSub(list_name="input-list"))
+        pub = consume_broker.publisher(list=ListSub(list_name="input-list"))
+
+        @sub
+        async def handle(msg: str) -> None:
+            mock(msg)
+
+        original_blpop = Redis.blpop
+
+        async def extended_blpop(self, *args, **kwargs):
+            result = await original_blpop(self, *args, **kwargs)
+            await asyncio.sleep(2)
+            return result
+
+        patcher = patch.object(Redis, "blpop", new=extended_blpop)
+        patcher.start()
+
+        await consume_broker.start()
+        await pub.publish("hello")
+        await asyncio.sleep(1)
+        await consume_broker.stop()
+        mock.assert_called_once_with("hello")
+
+    @pytest.mark.slow()
     async def test_consume_list_batch_with_one(
         self,
         queue: str,

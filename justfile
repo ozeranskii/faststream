@@ -14,8 +14,8 @@ default:
 [doc("Init infra")]
 [group("infra")]
 init python="3.10":
-  docker build . --build-arg PYTHON_VERSION={{python}}
-  uv sync --group dev
+  docker build . --build-arg PYTHON_VERSION={{python}} --no-cache --tag faststream:local
+  uv sync --group dev -p {{python}}
 
 [doc("Run all containers")]
 [group("infra")]

@@ -91,7 +91,8 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[UnifyRedisDict]):
 
         while self.running:
             try:
-                await self._get_msgs(*args)
+                with self.lock:
+                    await self._get_msgs(*args)
 
             except Exception as e:  # noqa: PERF203
                 self._log(
