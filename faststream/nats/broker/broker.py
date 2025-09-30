@@ -76,134 +76,97 @@ if TYPE_CHECKING:
     from faststream.specification.schema.extra import Tag, TagDict
 
     class NatsInitKwargs(TypedDict, total=False):
-        """NatsBroker.connect() method type hints."""
+        """NatsBroker.connect() method type hints.
 
-        error_cb: Annotated[
-            "ErrorCallback" | None,
-            Doc("Callback to report errors."),
-        ]
-        disconnected_cb: Annotated[
-            "Callback" | None,
-            Doc("Callback to report disconnection from NATS."),
-        ]
-        closed_cb: Annotated[
-            "Callback" | None,
-            Doc("Callback to report when client stops reconnection to NATS."),
-        ]
-        discovered_server_cb: Annotated[
-            "Callback" | None,
-            Doc("Callback to report when a new server joins the cluster."),
-        ]
-        reconnected_cb: Annotated[
-            "Callback" | None,
-            Doc("Callback to report success reconnection."),
-        ]
-        name: Annotated[
-            str | None,
-            Doc("Label the connection with name (shown in NATS monitoring)."),
-        ]
-        pedantic: Annotated[
-            bool,
-            Doc(
-                "Turn on NATS server pedantic mode that performs extra checks on the protocol. "
-                "https://docs.nats.io/using-nats/developer/connecting/misc#turn-on-pedantic-mode",
-            ),
-        ]
-        verbose: Annotated[
-            bool,
-            Doc("Verbose mode produce more feedback about code execution."),
-        ]
-        allow_reconnect: Annotated[
-            bool,
-            Doc("Whether recover connection automatically or not."),
-        ]
-        connect_timeout: Annotated[
-            int,
-            Doc("Timeout in seconds to establish connection with NATS server."),
-        ]
-        reconnect_time_wait: Annotated[
-            int,
-            Doc("Time in seconds to wait for reestablish connection to NATS server"),
-        ]
-        max_reconnect_attempts: Annotated[
-            int,
-            Doc("Maximum attempts number to reconnect to NATS server."),
-        ]
-        ping_interval: Annotated[
-            int,
-            Doc("Interval in seconds to ping."),
-        ]
-        max_outstanding_pings: Annotated[
-            int,
-            Doc("Maximum number of failed pings"),
-        ]
-        dont_randomize: Annotated[
-            bool,
-            Doc(
-                "Boolean indicating should client randomly shuffle servers list for reconnection randomness.",
-            ),
-        ]
-        flusher_queue_size: Annotated[
-            int,
-            Doc("Max count of commands awaiting to be flushed to the socket"),
-        ]
-        no_echo: Annotated[
-            bool,
-            Doc("Boolean indicating should commands be echoed."),
-        ]
-        tls_hostname: Annotated[
-            str | None,
-            Doc("Hostname for TLS."),
-        ]
-        token: Annotated[
-            str | None,
-            Doc("Auth token for NATS auth."),
-        ]
-        drain_timeout: Annotated[
-            int,
-            Doc("Timeout in seconds to drain subscriptions."),
-        ]
-        signature_cb: Annotated[
-            "SignatureCallback" | None,
-            Doc(
-                "A callback used to sign a nonce from the server while "
-                "authenticating with nkeys. The user should sign the nonce and "
-                "return the base64 encoded signature.",
-            ),
-        ]
-        user_jwt_cb: Annotated[
-            "JWTCallback" | None,
-            Doc(
-                "A callback used to fetch and return the account "
-                "signed JWT for this user.",
-            ),
-        ]
-        user_credentials: Annotated[
-            "Credentials" | None,
-            Doc("A user credentials file or tuple of files."),
-        ]
-        nkeys_seed: Annotated[
-            str | None,
-            Doc("Path-like object containing nkeys seed that will be used."),
-        ]
-        nkeys_seed_str: Annotated[
-            str | None,
-            Doc("Nkeys seed to be used."),
-        ]
-        inbox_prefix: Annotated[
-            str | bytes,
-            Doc(
-                "Prefix for generating unique inboxes, subjects with that prefix and NUID.ß",
-            ),
-        ]
-        pending_size: Annotated[
-            int,
-            Doc("Max size of the pending buffer for publishing commands."),
-        ]
-        flush_timeout: Annotated[
-            float | None,
-            Doc("Max duration to wait for a forced flush to occur."),
-        ]
+        Args:
+            error_cb:
+                Callback to report errors.
+            disconnected_cb: \
+                Callback to report disconnection from NATS.
+            closed_cb:
+                Callback to report when client stops reconnection to NATS.
+            discovered_server_cb:
+                A callback to report when a new server joins the cluster.
+            reconnected_cb:
+                Callback to report success reconnection.
+            name:
+                Label the connection with name (shown in NATS monitoring
+            pedantic:
+                Turn on NATS server pedantic mode that performs extra checks on the protocol.
+                https://docs.nats.io/using-nats/developer/connecting/misc#turn-on-pedantic-mode
+            verbose:
+                Verbose mode produce more feedback about code execution.
+            allow_reconnect:
+                Whether recover connection automatically or not.
+            connect_timeout:
+                Timeout in seconds to establish connection with NATS server.
+            reconnect_time_wait:
+                Time in seconds to wait for reestablish connection to NATS server
+            max_reconnect_attempts:
+                Maximum attempts number to reconnect to NATS server.
+            ping_interval:
+                Interval in seconds to ping.
+            max_outstanding_pings:
+                Maximum number of failed pings
+            dont_randomize:
+                Boolean indicating should client randomly shuffle servers list for reconnection randomness.
+            flusher_queue_size:
+                Max count of commands awaiting to be flushed to the socket
+            no_echo:
+                Boolean indicating should commands be echoed.
+            tls_hostname:
+                Hostname for TLS.
+            token:
+                Auth token for NATS auth.
+            drain_timeout:
+                Timeout in seconds to drain subscriptions.
+            signature_cb:
+                A callback used to sign a nonce from the server while authenticating with nkeys.
+                The user should sign the nonce and return the base64 encoded signature.
+            user_jwt_cb:
+                A callback used to fetch and return the account signed JWT for this user.
+            user_credentials:
+                A user credentials file or tuple of files.
+            nkeys_seed:
+                Path-like object containing nkeys seed that will be used.
+            nkeys_seed_str:
+                Nkeys seed to be used.
+            inbox_prefix:
+                Prefix for generating unique inboxes, subjects with that prefix and NUID.ß
+            pending_size:
+                Max size of the pending buffer for publishing commands.
+            flush_timeout:
+                Max duration to wait for a forced flush to occur
+        """
+
+        error_cb: "ErrorCallback" | None
+        disconnected_cb: "Callback" | None
+        closed_cb: Callback | None
+        discovered_server_cb: "Callback" | None
+        reconnected_cb: "Callback" | None
+        name: str | None
+        pedantic: bool
+        verbose: bool
+        allow_reconnect: bool
+        connect_timeout: int
+        reconnect_time_wait: int
+        max_reconnect_attempts: int
+        ping_interval: int
+        max_outstanding_pings: int
+        dont_randomize: bool
+        flusher_queue_size: int
+        no_echo: bool
+        tls_hostname: str | None
+        token: str | None
+        drain_timeout: int
+        signature_cb: "SignatureCallback" | None
+        user_jwt_cb: "JWTCallback" | None
+        user_credentials: "Credentials" | None
+        nkeys_seed: str | None
+        nkeys_seed_str: str | None
+        inbox_prefix: str | bytes
+        pending_size: int
+        flush_timeout: float | None
 
 
 class NatsBroker(
