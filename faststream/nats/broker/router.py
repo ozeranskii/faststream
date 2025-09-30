@@ -37,65 +37,48 @@ class NatsPublisher(ArgsContainer):
 
     def __init__(
         self,
-        subject: Annotated[
-            str,
-            Doc("NATS subject to send message."),
-        ],
+        subject: str = "",
         *,
-        headers: Annotated[
-            dict[str, str] | None,
-            Doc(
-                "Message headers to store metainformation. "
-                "**content-type** and **correlation_id** will be set automatically by framework anyway. "
-                "Can be overridden by `publish.headers` if specified.",
-            ),
-        ] = None,
-        reply_to: Annotated[
-            str,
-            Doc("NATS subject name to send response."),
-        ] = "",
+        headers: dict[str, str] | None = None,
+        reply_to: str = "",
         # JS
-        stream: Annotated[
-            Union[str, "JStream", None],
-            Doc(
-                "This option validates that the target `subject` is in presented stream. "
-                "Can be omitted without any effect.",
-            ),
-        ] = None,
-        timeout: Annotated[
-            float | None,
-            Doc("Timeout to send message to NATS."),
-        ] = None,
+        stream: Union[str, "JStream", None] = None,
+        timeout: float | None = None,
         # basic args
-        middlewares: Annotated[
-            Sequence["PublisherMiddleware"],
-            deprecated(
-                "This option was deprecated in 0.6.0. Use router-level middlewares instead."
-                "Scheduled to remove in 0.7.0",
-            ),
-            Doc("Publisher middlewares to wrap outgoing messages."),
-        ] = (),
+        middlewares: Sequence["PublisherMiddleware"] = (),
         # AsyncAPI information
-        title: Annotated[
-            str | None,
-            Doc("AsyncAPI publisher object title."),
-        ] = None,
-        description: Annotated[
-            str | None,
-            Doc("AsyncAPI publisher object description."),
-        ] = None,
-        schema: Annotated[
-            Any | None,
-            Doc(
-                "AsyncAPI publishing message type. "
-                "Should be any python-native object annotation or `pydantic.BaseModel`.",
-            ),
-        ] = None,
-        include_in_schema: Annotated[
-            bool,
-            Doc("Whetever to include operation in AsyncAPI schema or not."),
-        ] = True,
+        title: str | None = None,
+        description: str | None = None,
+        schema: Any | None = None,
+        include_in_schema: bool = True,
     ) -> None:
+        """Initialized the NatsPublisher object.
+
+        Args:
+            subject:
+                NATS subject to send message.
+            headers:
+                Message headers to store metainformation.
+                **content-type** and **correlation_id** will be set automatically by framework anyway. Can be overridden by `publish.headers` if specified.
+            reply_to:
+                NATS subject name to send response.
+            stream:
+                This option validates that the target `subject` is in presented stream.
+                Can be omitted without any effect.
+            timeout:
+                Timeout to send message to NATS.
+            middlewares:
+                Publisher middlewares to wrap outgoing messages.
+            title:
+                AsyncAPI publisher object title.
+            description:
+                AsyncAPI publisher object description.
+            schema:
+                AsyncAPI publishing message type.
+                Should be any python-native object annotation or `pydantic.BaseModel`.
+            include_in_schema:
+                Whetever to include operation in AsyncAPI schema or not.
+        """
         super().__init__(
             subject=subject,
             headers=headers,
