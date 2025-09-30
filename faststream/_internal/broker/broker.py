@@ -1,11 +1,6 @@
 from abc import abstractmethod
-from collections.abc import Sequence
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Generic,
-    Optional,
-)
+from collections.abc import Iterable, Sequence
+from typing import TYPE_CHECKING, Any, Generic, Optional
 
 from fast_depends import Provider
 from typing_extensions import Self, deprecated
@@ -46,7 +41,7 @@ class BrokerUsecase(
         *,
         config: BrokerConfigType,
         specification: "BrokerSpec",
-        routers: Sequence["Registrator[MsgType]"],
+        routers: Iterable[Registrator[Any, Any]],
         **connection_kwargs: Any,
     ) -> None:
         super().__init__(
