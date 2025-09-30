@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
 
 from nats.aio.msg import Msg
 from nats.js import api
-from typing_extensions import Doc, deprecated
+from typing_extensions import deprecated
 
 from faststream._internal.broker.router import (
     ArgsContainer,
