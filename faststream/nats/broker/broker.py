@@ -77,7 +77,7 @@ if TYPE_CHECKING:
 
     class NatsInitKwargs(TypedDict, total=False):
         """NatsBroker.connect() method type hints.
-        
+
         Args:
             error_cb:
                 Callback to report errors.
