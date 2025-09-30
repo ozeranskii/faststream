@@ -36,59 +36,43 @@ class RedisPublisher(ArgsContainer):
 
     def __init__(
         self,
-        channel: Annotated[
-            Union["PubSub", str, None],
-            Doc("Redis PubSub object name to send message."),
-        ] = None,
+        channel: str | None = None,
         *,
-        list: Annotated[
-            Union["ListSub", str, None],
-            Doc("Redis List object name to send message."),
-        ] = None,
-        stream: Annotated[
-            Union["StreamSub", str, None],
-            Doc("Redis Stream object name to send message."),
-        ] = None,
-        headers: Annotated[
-            dict[str, Any] | None,
-            Doc(
-                "Message headers to store metainformation. "
-                "Can be overridden by `publish.headers` if specified.",
-            ),
-        ] = None,
-        reply_to: Annotated[
-            str,
-            Doc("Reply message destination PubSub object name."),
-        ] = "",
-        middlewares: Annotated[
-            Sequence["PublisherMiddleware"],
-            deprecated(
-                "This option was deprecated in 0.6.0. Use router-level middlewares instead."
-                "Scheduled to remove in 0.7.0",
-            ),
-            Doc("Publisher middlewares to wrap outgoing messages."),
-        ] = (),
-        # AsyncAPI information
-        title: Annotated[
-            str | None,
-            Doc("AsyncAPI publisher object title."),
-        ] = None,
-        description: Annotated[
-            str | None,
-            Doc("AsyncAPI publisher object description."),
-        ] = None,
-        schema: Annotated[
-            Any | None,
-            Doc(
-                "AsyncAPI publishing message type. "
-                "Should be any python-native object annotation or `pydantic.BaseModel`.",
-            ),
-        ] = None,
-        include_in_schema: Annotated[
-            bool,
-            Doc("Whetever to include operation in AsyncAPI schema or not."),
-        ] = True,
+        list: str | None = None,
+        stream: str | None = None,
+        headers: dict[str, Any] | None = None,
+        reply_to: str = "",
+        middlewares: Sequence["PublisherMiddleware"] = (),
+        title: str | None = None,
+        description: str | None = None,
+        schema: Any | None = None,
+        include_in_schema: bool = True,
     ) -> None:
+        """Initialize the RedisPublisher.
+
+        Args:
+            channel:
+                Redis PubSub object name to send message.
+            list:
+                Redis List object name to send message.
+            stream:
+                Redis Stream object name to send message.
+            headers:
+                Message headers to store metainformation. Can be overridden by `publish.headers` if specified.
+            reply_to:
+                Reply message destination PubSub object name.
+            middlewares:
+                Publisher middlewares to wrap outgoing messages.
+            title:
+                AsyncAPI publisher object title.
+            description:
+                AsyncAPI publisher object description.
+            schema:
+                AsyncAPI publishing message type.
+            include_in_schema:
+                Whetever to include operation in AsyncAPI schema or not.
+
+        """
         super().__init__(
             channel=channel,
             list=list,
