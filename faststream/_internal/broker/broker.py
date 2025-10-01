@@ -88,8 +88,6 @@ class BrokerUsecase(
         self.config.fd_config = config | self.config.fd_config
 
     async def start(self) -> None:
-        self._setup_logger()
-
         # TODO: filter by already running handlers after TestClient refactor
         for sub in self.subscribers:
             await sub.start()
@@ -111,6 +109,8 @@ class BrokerUsecase(
         """Connect to a remote server."""
         if self._connection is None:
             self._connection = await self._connect()
+            self._setup_logger()
+
         return self._connection
 
     @abstractmethod
