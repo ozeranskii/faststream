@@ -22,7 +22,7 @@ class StreamSub(NameRequired):
         maxlen:
             Redis Stream maxlen publish option. Remove eldest message if maxlen exceeded.
         name:
-            The name of the object
+            The original Redis Stream name.
         no_ack:
             Whether to disable **FastStream** auto acknowledgement logic or not.
         polling_interval:
