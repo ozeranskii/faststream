@@ -11,14 +11,14 @@ class StreamSub(NameRequired):
     Args:
         batch:
             Whether to consume messages in batches or not.
+        max_records:
+            Number of messages to consume as one batch.
         consumer:
             The consumer unique name
         group:
             The name of consumer group
         last_id:
             An Entry ID, which uses to pick up from where it left off after it is restarted.
-        max_records:
-            Number of messages to consume as one batch.
         maxlen:
             Redis Stream maxlen publish option. Remove eldest message if maxlen exceeded.
         name:
