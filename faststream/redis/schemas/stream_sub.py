@@ -24,7 +24,7 @@ class StreamSub(NameRequired):
         name:
             The original Redis Stream name.
         no_ack:
-            Whether to disable **FastStream** auto acknowledgement logic or not.
+            If True, to enable the XREADGROUP NOACK subcommand.
         polling_interval:
             Polling interval in seconds.
     """
