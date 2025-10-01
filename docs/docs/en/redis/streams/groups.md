@@ -64,5 +64,3 @@ By following the steps and code examples provided above, you can create a FastSt
   A consumer group consists multiple consumer instances working together. You need giving each a unique name using the **consumer** option. [Redis Consumers](https://redis.io/docs/latest/develop/tools/insight/tutorials/insight-stream-consumer/#run-the-consumer){.external-link target="_blank"}
 
   In cases where reliability is not a requirement and the occasional message loss is acceptable, you can use **no_ack** option. This is equivalent to acknowledging the message when it is read. [Redis Xgroupread](https://redis.io/docs/latest/commands/xreadgroup/#differences-between-xread-and-xreadgroup){.external-link target="_blank"}
-  
-  
