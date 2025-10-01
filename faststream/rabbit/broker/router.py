@@ -251,42 +251,37 @@ class RabbitRouter(RabbitRegistrator, BrokerRouter[IncomingMessage]):
 
     def __init__(
         self,
-        prefix: Annotated[
-            str,
-            Doc("String prefix to add to all subscribers queues."),
-        ] = "",
-        handlers: Annotated[
-            Iterable[RabbitRoute],
-            Doc("Route object to include."),
-        ] = (),
+        prefix: str = "",
+        handlers: Iterable[RabbitRoute] = (),
         *,
-        dependencies: Annotated[
-            Iterable["Dependant"],
-            Doc(
-                "Dependencies list (`[Dependant(),]`) to apply to all routers' publishers/subscribers.",
-            ),
-        ] = (),
-        middlewares: Annotated[
-            Sequence["BrokerMiddleware[Any, Any]"],
-            Doc("Router middlewares to apply to all routers' publishers/subscribers."),
-        ] = (),
-        routers: Annotated[
-            Iterable[RabbitRegistrator],
-            Doc("Routers to apply to broker."),
-        ] = (),
-        parser: Annotated[
-            Optional["CustomCallable"],
-            Doc("Parser to map original **IncomingMessage** Msg to FastStream one."),
-        ] = None,
-        decoder: Annotated[
-            Optional["CustomCallable"],
-            Doc("Function to decode FastStream msg bytes body to python objects."),
-        ] = None,
-        include_in_schema: Annotated[
-            bool | None,
-            Doc("Whetever to include operation in AsyncAPI schema or not."),
-        ] = None,
+        dependencies: Iterable["Dependant"] = (),
+        middlewares: Sequence["BrokerMiddleware[Any, Any]"] = (),
+        routers: Iterable[RabbitRegistrator] = (),
+        parser: Optional["CustomCallable"] = None,
+        decoder: Optional["CustomCallable"] = None,
+        include_in_schema: bool | None = None,
     ) -> None:
+        """
+        Initialized RabbitRouter.
+
+        Args:
+            prefix:
+                String prefix to add to all subscribers queues.
+            handlers:
+                Route object to include.
+            dependencies:
+                Dependencies list (`[Dependant(),]`) to apply to all routers' publishers/subscribers. Defaults to ().
+            middlewares:
+                Router middlewares to apply to all routers' publishers/subscribers. Defaults to ().
+            routers:
+                Routers to apply to broker. Defaults to ().
+            parser:
+                Parser to map original **IncomingMessage** Msg to FastStream one. Defaults to None.
+            decoder:
+                Function to decode FastStream msg bytes body to python objects. Defaults to None.
+            include_in_schema:
+                Whetever to include operation in AsyncAPI schema or not. Defaults to None.
+        """
         super().__init__(
             handlers=handlers,
             config=RabbitBrokerConfig(
