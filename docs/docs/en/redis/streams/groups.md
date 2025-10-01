@@ -55,3 +55,11 @@ Publishing a message is the same as what's defined on [Stream Publishing](./publ
 ```
 
 By following the steps and code examples provided above, you can create a FastStream application that consumes messages from a Redis stream using a Consumer Group for distributed message processing.
+
+
+## Redis Stream details
+
+  If you don't want to collect data into stream forever, you shoud using the **max_len** option. The old entries are automatically evicted when the specified length is reached, so that the stream is left at a consist size.
+
+  A consumer group consists multiple consumer instances working together. You need giving each a unique name using the **consumer** option.
+  
