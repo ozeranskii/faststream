@@ -5,6 +5,67 @@ In these cases, you cannot use the regular **FastStream's** `#!python @broker.su
 
 However, the framework still allows you to do so in a suitable manner.
 
+!!! note "Warning"
+    Dynamic subscribers are not supported by [test brokers](../test).
+
+    The examples below will not work.
+
+    === "AIOKafka"
+        ```python linenums="1"
+        broker = KafkaBroker()
+
+        async with TestKafkaBroker(broker) as br:
+            subscriber = br.subscriber("test-topic", persistent=False)
+
+            await subscriber.start()
+            message = await subscriber.get_one()
+            await subscriber.stop()
+        ```
+    === "Confluent"
+        ```python linenums="1"
+        broker = KafkaBroker()
+
+        async with TestKafkaBroker(broker) as br:
+            subscriber = br.subscriber("test-topic", persistent=False)
+
+            await subscriber.start()
+            message = await subscriber.get_one()
+            await subscriber.stop()
+        ```
+    === "RabbitMQ"
+        ```python linenums="1"
+        broker = RabbitBroker()
+
+        async with TestRabbitBroker(broker) as br:
+            subscriber = br.subscriber("test-queue", persistent=False)
+
+            await subscriber.start()
+            message = await subscriber.get_one()
+            await subscriber.stop()
+        ```
+    === "NATS"
+        ```python linenums="1"
+        broker = NatsBroker()
+
+        async with TestNatsBroker(broker) as br:
+            subscriber = br.subscriber("test-subject", persistent=False)
+
+            await subscriber.start()
+            message = await subscriber.get_one()
+            await subscriber.stop()
+        ```
+    === "Redis"
+        ```python linenums="1"
+        broker = RedisBroker()
+
+        async with TestRedisBroker(broker) as br:
+            subscriber = br.subscriber("test-channel", persistent=False)
+
+            await subscriber.start()
+            message = await subscriber.get_one()
+            await subscriber.stop()
+        ```
+
 ## Consuming a Single Message
 
 To process a single message, you should create a subscriber and call the appropriate method on it. Don't forget to start the subscriber.
