@@ -155,91 +155,78 @@ class RabbitRoute(SubscriberRoute):
 
     def __init__(
         self,
-        call: Annotated[
-            Callable[..., "AioPikaSendableMessage"]
-            | Callable[..., Awaitable["AioPikaSendableMessage"]],
-            Doc(
-                "Message handler function "
-                "to wrap the same with `@broker.subscriber(...)` way.",
-            ),
-        ],
-        queue: Annotated[
-            Union[str, "RabbitQueue"],
-            Doc(
-                "RabbitMQ queue to listen. "
-                "**FastStream** declares and binds queue object to `exchange` automatically by default.",
-            ),
-        ],
-        exchange: Annotated[
-            Union[str, "RabbitExchange", None],
-            Doc(
-                "RabbitMQ exchange to bind queue to. "
-                "Uses default exchange if not present. "
-                "**FastStream** declares exchange object automatically by default.",
-            ),
-        ] = None,
+        call: Callable[..., "AioPikaSendableMessage"]
+        | Callable[..., Awaitable["AioPikaSendableMessage"]],
+        queue: Union[str, "RabbitQueue"],
+        exchange: Union[str, "RabbitExchange", None] = None,
         *,
-        publishers: Annotated[
-            Iterable[RabbitPublisher],
-            Doc("RabbitMQ publishers to broadcast the handler result."),
-        ] = (),
-        consume_args: Annotated[
-            dict[str, Any] | None,
-            Doc("Extra consumer arguments to use in `queue.consume(...)` method."),
-        ] = None,
+        publishers: Iterable[RabbitPublisher] = (),
+        consume_args: dict[str, Any] | None = None,
         # broker arguments
-        dependencies: Annotated[
-            Iterable["Dependant"],
-            Doc("Dependencies list (`[Dependant(),]`) to apply to the subscriber."),
-        ] = (),
-        parser: Annotated[
-            Optional["CustomCallable"],
-            Doc("Parser to map original **IncomingMessage** Msg to FastStream one."),
-        ] = None,
-        decoder: Annotated[
-            Optional["CustomCallable"],
-            Doc("Function to decode FastStream msg bytes body to python objects."),
-        ] = None,
+        dependencies: Iterable["Dependant"] = (),
+        parser: Optional["CustomCallable"] = None,
+        decoder: Optional["CustomCallable"] = None,
         middlewares: Annotated[
             Sequence["SubscriberMiddleware[Any]"],
             deprecated(
                 "This option was deprecated in 0.6.0. Use router-level middlewares instead."
                 "Scheduled to remove in 0.7.0",
             ),
-            Doc("Subscriber middlewares to wrap incoming message processing."),
         ] = (),
         no_ack: Annotated[
             bool,
-            Doc("Whether to disable **FastStream** auto acknowledgement logic or not."),
             deprecated(
                 "This option was deprecated in 0.6.0 to prior to **ack_policy=AckPolicy.MANUAL**. "
                 "Scheduled to remove in 0.7.0",
             ),
         ] = EMPTY,
         ack_policy: AckPolicy = EMPTY,
-        no_reply: Annotated[
-            bool,
-            Doc(
-                "Whether to disable **FastStream** RPC and Reply To auto responses or not.",
-            ),
-        ] = False,
+        no_reply: bool = False,
         # AsyncAPI information
-        title: Annotated[
-            str | None,
-            Doc("AsyncAPI subscriber object title."),
-        ] = None,
-        description: Annotated[
-            str | None,
-            Doc(
-                "AsyncAPI subscriber object description. "
-                "Uses decorated docstring as default.",
-            ),
-        ] = None,
-        include_in_schema: Annotated[
-            bool,
-            Doc("Whetever to include operation in AsyncAPI schema or not."),
-        ] = True,
+        title: str | None = None,
+        description: str | None = None,
+        include_in_schema: bool = True,
     ) -> None:
+        """Initialized RabbitRoute.
+
+        Args:
+            call:
+                Message handler function
+                to wrap the same with `@broker.subscriber(...)` way.
+            queue:
+                RabbitMQ queue to listen.
+                **FastStream** declares and binds queue object to `exchange` automatically by default.
+            exchange:
+                RabbitMQ exchange to bind queue to.
+                Uses default exchange if not present.
+                **FastStream** declares exchange object automatically by default.
+            publishers:
+                RabbitMQ publishers to broadcast the handler result.
+            consume_args:
+                Extra consumer arguments to use in `queue.consume(...)` method.
+            dependencies:
+                Dependencies list (`[Dependant(),]`) to apply to the subscriber.
+            parser:
+                Parser to map original **IncomingMessage** Msg to FastStream one.
+            decoder:
+                Function to decode FastStream msg bytes body to python objects.
+            middlewares:
+                Subscriber middlewares to wrap incoming message processing.
+            no_ack:
+                Whether to disable **FastStream** auto acknowledgement logic or not.
+                Scheduled to remove in 0.7.0
+            ack_policy:
+                Acknowledgment policy for the subscriber (by default `MANUAL`).
+            no_reply:
+                Whether to disable **FastStream** RPC and Reply To auto responses or not.
+            title:
+                AsyncAPI subscriber object title.
+            description:
+                AsyncAPI subscriber object description.
+                Uses decorated docstring as default.
+            include_in_schema:
+                Whetever to include operation in AsyncAPI schema or not.
+        """
         super().__init__(
             call,
             publishers=publishers,
