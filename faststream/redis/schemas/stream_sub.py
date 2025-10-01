@@ -10,7 +10,7 @@ class StreamSub(NameRequired):
 
     Args:
         batch:
-            Whether to send messages in batches or not.
+            Whether to consume messages in batches or not.
         consumer:
             The consumer unique name
         group:
