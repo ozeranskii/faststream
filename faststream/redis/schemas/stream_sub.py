@@ -6,7 +6,28 @@ from faststream.exceptions import SetupError
 
 
 class StreamSub(NameRequired):
-    """A class to represent a Redis Stream subscriber."""
+    """A class to represent a Redis Stream subscriber.
+
+    Args:
+        batch:
+            Whether to send messages in batches or not.
+        consumer:
+            The consumer unique name
+        group:
+            The name of consumer group
+        last_id:
+            An Entry ID, which uses to pick up from where it left off after it is restarted.
+        max_records:
+            Number of messages to consume as one batch.
+        maxlen:
+            Redis Stream maxlen publish option. Remove eldest message if maxlen exceeded.
+        name:
+            The name of the object
+        no_ack:
+            Whether to disable **FastStream** auto acknowledgement logic or not.
+        polling_interval:
+            Polling interval in seconds.
+    """
 
     __slots__ = (
         "batch",
