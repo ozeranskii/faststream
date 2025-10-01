@@ -15,7 +15,7 @@ from fastapi.routing import APIRoute
 from fastapi.utils import generate_unique_id
 from starlette.responses import JSONResponse
 from starlette.routing import BaseRoute
-from typing_extensions import Doc, deprecated, override
+from typing_extensions import deprecated, override
 
 from faststream.__about__ import SERVICE_NAME
 from faststream._internal.constants import EMPTY
@@ -66,16 +66,16 @@ class RabbitRouter(StreamRouter[IncomingMessage]):
         virtualhost: str | None = None,
         ssl_options: Optional["SSLOptions"] = None,
         client_properties: Optional["FieldTable"] = None,
-        timeout: TimeoutType = None,
+        timeout: "TimeoutType" = None,
         fail_fast: bool = True,
-        reconnect_interval: TimeoutType = 5.0,
-        default_channel: Optional["Channel"]= None,
+        reconnect_interval: "TimeoutType" = 5.0,
+        default_channel: Optional["Channel"] = None,
         app_id: str | None = SERVICE_NAME,
         graceful_timeout: float | None = 15.0,
         decoder: Optional["CustomCallable"] = None,
-        parser: Optional["CustomCallable"]= None,
-        middlewares: Sequence[BrokerMiddleware[Any, Any]] = (),
-        security: Optional["BaseSecurity"]= None,
+        parser: Optional["CustomCallable"] = None,
+        middlewares: Sequence["BrokerMiddleware[Any, Any]"] = (),
+        security: Optional["BaseSecurity"] = None,
         specification: Optional["SpecificationFactory"] = None,
         specification_url: str | None = None,
         protocol: str | None = None,
@@ -114,10 +114,12 @@ class RabbitRouter(StreamRouter[IncomingMessage]):
         lifespan: Optional["Lifespan[Any]"] = None,
         deprecated: bool | None = None,
         include_in_schema: bool = True,
-        generate_unique_id_function: Callable[["APIRoute"], str] = Default(generate_unique_id),
+        generate_unique_id_function: Callable[["APIRoute"], str] = Default(
+            generate_unique_id
+        ),
     ) -> None:
-        """Initilized RabbitRouter.
-        
+        """Initialized RabbitRouter.
+
         Args:
             url:
                 The RabbitMQ destination location to connect.

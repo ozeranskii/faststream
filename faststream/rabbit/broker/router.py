@@ -2,7 +2,7 @@ from collections.abc import Awaitable, Callable, Iterable, Sequence
 from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
 
 from aio_pika import IncomingMessage
-from typing_extensions import Doc, deprecated
+from typing_extensions import deprecated
 
 from faststream._internal.broker.router import (
     ArgsContainer,
@@ -261,8 +261,7 @@ class RabbitRouter(RabbitRegistrator, BrokerRouter[IncomingMessage]):
         decoder: Optional["CustomCallable"] = None,
         include_in_schema: bool | None = None,
     ) -> None:
-        """
-        Initialized RabbitRouter.
+        """Initialized RabbitRouter.
 
         Args:
             prefix:
