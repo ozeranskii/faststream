@@ -59,6 +59,6 @@ By following the steps and code examples provided above, you can create a FastSt
 
 ## Redis Stream details
 
-  If you don't want to collect data into stream forever, you should using the **max_len** option. The old entries are automatically evicted when the specified length is reached, so that the stream is left at a consist size.
+  If you don't want to collect data into stream forever, you should using the **maxlen** option. The old entries are automatically evicted when the specified length is reached, so that the stream is left at a consist size.
 
   A consumer group consists multiple consumer instances working together. You need giving each a unique name using the **consumer** option.
