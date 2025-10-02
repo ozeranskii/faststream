@@ -42,7 +42,7 @@ services:
       - no-new-privileges:true
 
   faststream:
-    image: faststream:local
+    build: .
     volumes:
       - ./:/src
       - /src/.venv/
