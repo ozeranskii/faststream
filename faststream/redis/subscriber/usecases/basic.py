@@ -45,6 +45,7 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[UnifyRedisDict]):
         calls: "CallsCollection[Any]",
     ) -> None:
         super().__init__(config, specification, calls)
+        self.__read_lock = anyio.Lock()
         self.config = config
 
     @property
@@ -86,12 +87,19 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[UnifyRedisDict]):
         else:
             start_signal.set()
 
+    @override
+    async def stop(self) -> None:
+        with anyio.move_on_after(self._outer_config.graceful_timeout):
+            async with self.__read_lock:
+                pass
+        await super().stop()
+
     async def _consume(self, *args: Any, start_signal: anyio.Event) -> None:
         connected = True
 
         while self.running:
             try:
-                with self.lock:
+                async with self.__read_lock:
                     await self._get_msgs(*args)
 
             except Exception as e:  # noqa: PERF203
