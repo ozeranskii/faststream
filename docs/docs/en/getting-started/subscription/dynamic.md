@@ -5,8 +5,8 @@ In these cases, you cannot use the regular **FastStream's** `#!python @broker.su
 
 However, the framework still allows you to do so in a suitable manner.
 
-!!! note "Warning"
-    Dynamic subscribers are not supported by [test brokers](../test).
+!!! warning
+    Dynamic subscribers are not supported by [TestBroker](../test){.internal-link}.
 
     The examples below will not work.
 
@@ -18,7 +18,7 @@ However, the framework still allows you to do so in a suitable manner.
             subscriber = br.subscriber("test-topic", persistent=False)
 
             await subscriber.start()
-            message = await subscriber.get_one()
+            message = await subscriber.get_one()  # does not work
             await subscriber.stop()
         ```
     === "Confluent"
@@ -29,7 +29,7 @@ However, the framework still allows you to do so in a suitable manner.
             subscriber = br.subscriber("test-topic", persistent=False)
 
             await subscriber.start()
-            message = await subscriber.get_one()
+            message = await subscriber.get_one()  # does not work
             await subscriber.stop()
         ```
     === "RabbitMQ"
@@ -40,7 +40,7 @@ However, the framework still allows you to do so in a suitable manner.
             subscriber = br.subscriber("test-queue", persistent=False)
 
             await subscriber.start()
-            message = await subscriber.get_one()
+            message = await subscriber.get_one()  # does not work
             await subscriber.stop()
         ```
     === "NATS"
@@ -51,7 +51,7 @@ However, the framework still allows you to do so in a suitable manner.
             subscriber = br.subscriber("test-subject", persistent=False)
 
             await subscriber.start()
-            message = await subscriber.get_one()
+            message = await subscriber.get_one()  # does not work
             await subscriber.stop()
         ```
     === "Redis"
@@ -62,7 +62,7 @@ However, the framework still allows you to do so in a suitable manner.
             subscriber = br.subscriber("test-channel", persistent=False)
 
             await subscriber.start()
-            message = await subscriber.get_one()
+            message = await subscriber.get_one()  # does not work
             await subscriber.stop()
         ```
 
