@@ -147,9 +147,12 @@ class SubscriberUsecase(Endpoint, Generic[MsgType]):
 
         Blocks event loop up to graceful_timeout seconds.
         """
+        # set running false before releasing to stop new message reading
+        self.running = False
+
+        # Wait for already consumed messages to be processed
         if isinstance(self.lock, MultiLock):
             await self.lock.wait_release(self._outer_config.graceful_timeout)
-        self.running = False
 
     def add_call(
         self,
