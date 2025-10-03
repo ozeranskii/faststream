@@ -91,8 +91,7 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[UnifyRedisDict]):
     async def stop(self) -> None:
         with anyio.move_on_after(self._outer_config.graceful_timeout):
             async with self.__read_lock:
-                pass
-        await super().stop()
+                await super().stop()
 
     async def _consume(self, *args: Any, start_signal: anyio.Event) -> None:
         connected = True
