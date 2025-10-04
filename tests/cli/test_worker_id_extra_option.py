@@ -5,7 +5,7 @@ from tests.marks import skip_windows
 
 
 @skip_windows
-@pytest.mark.slow(),
+@pytest.mark.slow()
 @pytest.mark.parametrize(
     ("app_import"),
     (
