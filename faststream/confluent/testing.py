@@ -333,14 +333,6 @@ def _is_handler_matches(
     topic: str,
     partition: int | None,
 ) -> bool:
-    return _try_match_publisher(handler, topic, partition)
-
-
-def _try_match_publisher(
-    handler: "LogicSubscriber[Any]",
-    topic: str,
-    partition: int | None,
-) -> bool:
     return bool(
         any(
             p.topic == topic and (partition is None or p.partition == partition)
