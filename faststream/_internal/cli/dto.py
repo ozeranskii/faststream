@@ -14,7 +14,7 @@ class RunArgs:
     is_factory: bool = False
     log_config: Path | None = None
     log_level: int = logging.NOTSET
-    app_level: int = logging.INFO  # option for reloader only =
+    app_level: int = logging.INFO  # option for reloader only
 
 
 class RunFunction(Protocol):
