@@ -226,6 +226,27 @@ def test_serve_asyncapi_docs_from_app(
 
 
 @skip_windows
+@require_aiokafka
+def test_serve_asyncapi_docs_from_app_with_reload(
+    generate_template: interfaces.GenerateTemplateFactory,
+    faststream_cli: interfaces.FastStreamCLIFactory,
+) -> None:
+    with (
+        generate_template(app_code) as app_path,
+        faststream_cli(
+            "faststream",
+            "docs",
+            "serve",
+            f"{app_path.stem}:app",
+            "--reload",
+        ) as cli,
+    ):
+        assert cli.wait_for_stderr("HTTPServer running on http://localhost:8000"), (
+            cli.stderr
+        )
+
+
+@skip_windows
 @skip_macos
 @require_aiokafka
 @pytest.mark.slow()
