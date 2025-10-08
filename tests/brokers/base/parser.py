@@ -197,7 +197,7 @@ class LocalCustomParserTestcase(BaseTestcaseConfig):
         mock: MagicMock,
         queue: str,
     ) -> None:
-        """https://github.com/ag2ai/faststream/issues/2554"""
+        """Fixes https://github.com/ag2ai/faststream/issues/2554."""
         start_event, consumed_event, stopped_event = (
             asyncio.Event(),
             asyncio.Event(),
@@ -248,7 +248,7 @@ class LocalCustomParserTestcase(BaseTestcaseConfig):
         event: asyncio.Event,
         mock: MagicMock,
     ) -> None:
-        """https://github.com/ag2ai/faststream/issues/2554"""
+        """Fixes https://github.com/ag2ai/faststream/issues/2554."""
         broker = self.get_broker()
 
         async def custom_decoder(msg, original):
