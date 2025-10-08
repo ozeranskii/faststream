@@ -326,6 +326,7 @@ class TestTestBrokerFormats:
     async def test_binary_fallback_to_json(
         self, queue: str, mock: MagicMock, event: asyncio.Event
     ) -> None:
+        """https://github.com/ag2ai/faststream/issues/2552"""
         broker = RedisBroker()
 
         @broker.subscriber(stream=queue, message_format=BinaryMessageFormatV1)
