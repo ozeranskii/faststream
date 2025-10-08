@@ -114,13 +114,15 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
 
         context = self._outer_config.fd_config.context
 
+        async_parser, async_decoder = self._get_parser_and_decoder()
+
         return await process_msg(  # type: ignore[return-value]
             msg=raw_message,
             middlewares=(
                 m(raw_message, context=context) for m in self._broker_middlewares
             ),
-            parser=self._parser,
-            decoder=self._decoder,
+            parser=async_parser,
+            decoder=async_decoder,
         )
 
     @override
@@ -129,6 +131,8 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
         assert not self.calls, (
             "You can't use iterator if subscriber has registered handlers."
         )
+
+        async_parser, async_decoder = self._get_parser_and_decoder()
 
         timeout = 5.0
         while True:
@@ -146,8 +150,8 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
                     middlewares=(
                         m(raw_message, context=context) for m in self._broker_middlewares
                     ),
-                    parser=self._parser,
-                    decoder=self._decoder,
+                    parser=async_parser,
+                    decoder=async_decoder,
                 ),
             )
 
