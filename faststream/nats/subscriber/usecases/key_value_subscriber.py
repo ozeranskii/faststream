@@ -123,6 +123,9 @@ class KeyValueWatchSubscriber(
         timeout = 5
         sleep_interval = timeout / 10
 
+        context = self._outer_config.fd_config.context
+        async_parser, async_decoder = self._get_parser_and_decoder()
+
         while True:
             msg = None
             with anyio.move_on_after(timeout):
@@ -133,9 +136,6 @@ class KeyValueWatchSubscriber(
 
             if msg is None:
                 continue
-
-            context = self._outer_config.fd_config.context
-            async_parser, async_decoder = self._get_parser_and_decoder()
 
             yield cast(
                 "NatsKvMessage",

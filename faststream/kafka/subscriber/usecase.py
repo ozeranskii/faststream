@@ -171,10 +171,10 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
             "You can't use `get_one` method if subscriber has registered handlers."
         )
 
+        context = self._outer_config.fd_config.context
         async_parser, async_decoder = self._get_parser_and_decoder()
 
         async for raw_message in self.consumer:
-            context = self._outer_config.fd_config.context
             msg: KafkaMessage = await process_msg(  # type: ignore[assignment]
                 msg=raw_message,
                 middlewares=(

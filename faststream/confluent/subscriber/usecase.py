@@ -132,6 +132,7 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
             "You can't use iterator if subscriber has registered handlers."
         )
 
+        context = self._outer_config.fd_config.context
         async_parser, async_decoder = self._get_parser_and_decoder()
 
         timeout = 5.0
@@ -140,8 +141,6 @@ class LogicSubscriber(TasksMixin, SubscriberUsecase[MsgType]):
 
             if raw_message is None:
                 continue
-
-            context = self._outer_config.fd_config.context
 
             yield cast(
                 "KafkaMessage",
