@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -698,15 +698,15 @@ wheels = [
 
 [[package]]
 name = "fast-depends"
-version = "3.0.0rc1"
+version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/19/f775194a6d11945004298acbc02dabf654e6185fd1c80f7e0cbb10cc68bb/fast_depends-3.0.0rc1.tar.gz", hash = "sha256:7946c5f9dcf90c6c7d33382b5172cc02ddc162e9a554004b25e05deb870df0a6", size = 20811, upload-time = "2025-08-12T14:45:33.606Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/70/751d307eaf1743ad8a215382bf6534bf9ae929de643a55428aa07044816d/fast_depends-3.0.0.tar.gz", hash = "sha256:248f237b8c263469b38b9b32decf420ef33dfe39177dda065ade2e50d0cfa565", size = 17268, upload-time = "2025-10-11T10:34:58.54Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d9/53/8e6ccbfecd0dfd2cc35d1db7a0c6de762a64b9562141335f38c6f1a0aa8a/fast_depends-3.0.0rc1-py3-none-any.whl", hash = "sha256:f08735e8ac1a012b345f239a735b0626a516e6742ab4c96d14ebb5085451003b", size = 24369, upload-time = "2025-08-12T14:45:31.836Z" },
+    { url = "https://files.pythonhosted.org/packages/89/c9/bcec5355489bb2858224a22e675897068ae490c695cdd0607daf2f121ff5/fast_depends-3.0.0-py3-none-any.whl", hash = "sha256:3ee9c302d2bd891a2940e01167587eb530c5c920931d953b38e98a09f3677943", size = 24102, upload-time = "2025-10-11T10:34:56.871Z" },
 ]
 
 [package.optional-dependencies]
@@ -730,7 +730,7 @@ wheels = [
 
 [[package]]
 name = "faststream"
-version = "0.6.0rc4"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "anyio" },
@@ -888,7 +888,7 @@ requires-dist = [
     { name = "anyio", specifier = ">=4.0,<5" },
     { name = "confluent-kafka", marker = "python_full_version >= '3.13' and extra == 'confluent'", specifier = ">=2.6,!=2.8.1,<3" },
     { name = "confluent-kafka", marker = "python_full_version < '3.13' and extra == 'confluent'", specifier = ">=2,!=2.8.1,<3" },
-    { name = "fast-depends", extras = ["pydantic"], specifier = ">=3.0.0rc1,<4.0.0" },
+    { name = "fast-depends", extras = ["pydantic"], specifier = ">=3.0.0" },
     { name = "nats-py", marker = "extra == 'nats'", specifier = ">=2.7.0,<=3.0.0" },
     { name = "opentelemetry-sdk", marker = "extra == 'otel'", specifier = ">=1.24.0,<2.0.0" },
     { name = "prometheus-client", marker = "extra == 'prometheus'", specifier = ">=0.20.0,<0.30.0" },

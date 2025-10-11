@@ -105,9 +105,10 @@ class TestRedisBroker(TestBroker[RedisBroker]):
 
         pub_sub.get_message = get_msg
 
-        broker.config.broker_config.connection._client = connection
-
         connection.pubsub.side_effect = lambda: pub_sub
+        connection.aclose = AsyncMock()
+
+        broker.config.broker_config.connection._client = connection
         return connection
 
 
