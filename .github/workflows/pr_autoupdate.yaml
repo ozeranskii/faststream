@@ -36,7 +36,6 @@ jobs:
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
 
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           set -ux
