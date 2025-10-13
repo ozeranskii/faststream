@@ -10,7 +10,7 @@ import typer
 
 from faststream import FastStream
 from faststream.__about__ import __version__
-from faststream._internal._compat import json_loads
+from faststream._internal._compat import IS_WINDOWS, json_loads
 from faststream._internal.application import Application
 from faststream.asgi import AsgiFastStream
 from faststream.exceptions import INSTALL_WATCHFILES, SetupError, StartupValidationError
@@ -55,6 +55,7 @@ def version_callback(version: bool) -> None:
 
 
 def loop_callback(value: str) -> str:
+    # validate loop string in callback for more informative error
     if value != "auto":
         import_from_string(value)
     return value
@@ -224,6 +225,12 @@ def _run_imported_app(app_obj: "Application", args: RunArgs) -> None:
     if args.loop != "auto":
         _, loop_factory = import_from_string(args.loop)
         backend_options["loop_factory"] = loop_factory
+
+    elif not IS_WINDOWS:  # pragma: no cover
+        with suppress(ImportError):
+            import uvloop
+
+            backend_options["loop_factory"] = uvloop.new_event_loop
 
     try:
         anyio.run(

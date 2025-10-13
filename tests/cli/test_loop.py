@@ -38,6 +38,11 @@ def app_code() -> str:
             "uvloop:Loop",
             id="uvloop",
         ),
+        pytest.param(
+            "auto",
+            "uvloop:Loop",
+            id="auto uvloop",
+        ),
     ),
 )
 def test_loop(
