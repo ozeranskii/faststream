@@ -1,4 +1,3 @@
-import httpx
 import pytest
 
 from tests.cli import interfaces
@@ -9,29 +8,18 @@ from tests.marks import skip_windows
 def app_code() -> str:
     return """
     import asyncio
+    import sys
 
-    from faststream.asgi import AsgiFastStream, AsgiResponse, get
-    from faststream.asgi.types import Scope
-    from faststream.nats import NatsBroker
-
-
-    @get
-    async def loop_handler(scope: Scope) -> AsgiResponse:
-        loop = asyncio.get_event_loop()
-        return AsgiResponse(
-            body=f"{loop.__module__}:{loop.__class__.__name__}".encode(),
-            status_code=200,
-        )
+    from faststream._internal.application import Application
 
 
-    broker = NatsBroker()
+    class MockApplication(Application):
+        async def run(self, *args, **kwargs):
+            loop = asyncio.get_event_loop()
+            print(f"{loop.__module__}:{loop.__class__.__name__}".encode(), file=sys.stderr)
 
-    app = AsgiFastStream(
-        broker,
-        asgi_routes=[
-            ("/loop", loop_handler),
-        ],
-    )
+
+    app = MockApplication()
     """
 
 
@@ -67,11 +55,9 @@ def test_loop(
             "--loop",
             loop_param,
             f"{app_path.stem}:app",
-        ),
+        ) as cli,
     ):
-        response = httpx.get("http://127.0.0.1:8000/loop")
-        assert response.text == expected_loop
-        assert response.status_code == 200
+        assert cli.wait_for_stderr(expected_loop)
 
 
 @pytest.mark.slow()
