@@ -21,7 +21,6 @@ from .options import (
     APP_ARGUMENT,
     APP_DIR_OPTION,
     FACTORY_OPTION,
-    LOOP_OPTION,
     RELOAD_EXTENSIONS_OPTION,
     RELOAD_FLAG,
 )
@@ -53,6 +52,12 @@ def version_callback(version: bool) -> None:
         )
 
         raise typer.Exit
+
+
+def loop_callback(value: str) -> str:
+    if value != "auto":
+        import_from_string(value)
+    return value
 
 
 @cli.callback()
@@ -87,7 +92,13 @@ def run(
     is_factory: bool = FACTORY_OPTION,
     reload: bool = RELOAD_FLAG,
     watch_extensions: list[str] = RELOAD_EXTENSIONS_OPTION,
-    loop: str = LOOP_OPTION,
+    loop: str = typer.Option(
+        "auto",
+        "--loop",
+        callback=loop_callback,
+        help=("Event loop factory implementation."),
+        envvar="FASTSTREAM_LOOP",
+    ),
     log_level: LogLevels = typer.Option(
         LogLevels.notset,
         "-l",

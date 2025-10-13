@@ -1,14 +1,5 @@
 import typer
 
-from faststream._internal.cli.utils.imports import import_from_string
-
-
-def check_loop(value: str) -> str:
-    if value != "auto":
-        import_from_string(value)
-    return value
-
-
 FACTORY_OPTION = typer.Option(
     False,
     "-f",
@@ -38,14 +29,6 @@ RELOAD_EXTENSIONS_OPTION = typer.Option(
     "--reload-extension",
     "--reload-ext",
     help="List of file extensions to watch by.",
-)
-
-LOOP_OPTION = typer.Option(
-    "auto",
-    "--loop",
-    callback=check_loop,
-    help=("Event loop factory implementation."),
-    envvar="FASTSTREAM_LOOP",
 )
 
 APP_ARGUMENT = typer.Argument(
