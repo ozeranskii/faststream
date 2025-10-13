@@ -76,6 +76,28 @@ def test_loop(
 
 @pytest.mark.slow()
 @skip_windows
+def test_loop_bad_format(
+    generate_template: interfaces.GenerateTemplateFactory,
+    faststream_cli: interfaces.FastStreamCLIFactory,
+    app_code: str,
+) -> None:
+    with (
+        generate_template(app_code) as app_path,
+        faststream_cli(
+            "faststream",
+            "run",
+            "--loop",
+            "not_found",
+            f"{app_path.stem}:app",
+        ) as cli,
+    ):
+        cli.wait_for_stderr(
+            'Invalid value for \'--loop\': Import string "not_found" must be in format "<module>:<attribute>"'
+        )
+
+
+@pytest.mark.slow()
+@skip_windows
 def test_loop_not_found(
     generate_template: interfaces.GenerateTemplateFactory,
     faststream_cli: interfaces.FastStreamCLIFactory,
@@ -91,7 +113,6 @@ def test_loop_not_found(
             f"{app_path.stem}:app",
         ) as cli,
     ):
-        cli.signint()
-        cli.wait(3.0)
-
-    assert cli.process.returncode == -2
+        cli.wait_for_stderr(
+            "Invalid value for '--loop': Please, input module like [python_file:docs_object] or [module:attribute]"
+        )
