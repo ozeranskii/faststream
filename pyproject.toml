@@ -141,6 +141,7 @@ testing = [
     "msgspec",
     "uvicorn>=0.34.3; python_version >= '3.9'",
     "uvicorn==0.33.0; python_version < '3.9'",
+    "uvloop>=0.15.1; sys_platform != 'win32' and (sys_platform != 'cygwin' and platform_python_implementation != 'PyPy')",
     "psutil==7.1.0",
     "prometheus-client>=0.20.0,<0.30.0",
     "opentelemetry-sdk>=1.24.0,<2.0.0",

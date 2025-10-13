@@ -10,7 +10,7 @@ import typer
 
 from faststream import FastStream
 from faststream.__about__ import __version__
-from faststream._internal._compat import IS_WINDOWS, json_loads
+from faststream._internal._compat import json_loads
 from faststream._internal.application import Application
 from faststream.asgi import AsgiFastStream
 from faststream.exceptions import INSTALL_WATCHFILES, SetupError, StartupValidationError
@@ -21,6 +21,7 @@ from .options import (
     APP_ARGUMENT,
     APP_DIR_OPTION,
     FACTORY_OPTION,
+    LOOP_OPTION,
     RELOAD_EXTENSIONS_OPTION,
     RELOAD_FLAG,
 )
@@ -86,6 +87,7 @@ def run(
     is_factory: bool = FACTORY_OPTION,
     reload: bool = RELOAD_FLAG,
     watch_extensions: list[str] = RELOAD_EXTENSIONS_OPTION,
+    loop: str = LOOP_OPTION,
     log_level: LogLevels = typer.Option(
         LogLevels.notset,
         "-l",
@@ -132,6 +134,7 @@ def run(
         is_factory=is_factory,
         log_config=log_config,
         log_level=casted_log_level,
+        loop=loop,
     )
 
     if reload:
@@ -206,17 +209,17 @@ def _run_imported_app(app_obj: "Application", args: RunArgs) -> None:
     if args.log_config is not None:
         set_log_config(args.log_config)
 
-    if not IS_WINDOWS:  # pragma: no cover
-        with suppress(ImportError):
-            import uvloop
-
-            uvloop.install()
+    backend_options = {}
+    if args.loop != "auto":
+        _, loop_factory = import_from_string(args.loop)
+        backend_options["loop_factory"] = loop_factory
 
     try:
         anyio.run(
             app_obj.run,
             args.app_level,
             args.extra_options,
+            backend_options=backend_options,
         )
 
     except StartupValidationError as startup_exc:
