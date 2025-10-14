@@ -111,7 +111,8 @@ Instead, you should create the context in a slightly different way. The `FastStr
 ```python
 from typing import Annotated
 
-from faststream import Context, ContextRepo, FastStream
+from faststream import Context, FastStream
+from faststream.context import ContextRepo
 from faststream.rabbit import RabbitBroker
 
 broker = RabbitBroker()
@@ -547,7 +548,8 @@ Instead, you should create the context in a slightly different way. The `FastStr
 ```python
 from typing import Annotated
 
-from faststream import Context, ContextRepo, FastStream
+from faststream import Context, FastStream
+from faststream.context import ContextRepo
 from faststream.rabbit import RabbitBroker
 
 broker = RabbitBroker()
