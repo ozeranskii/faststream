@@ -1,5 +1,6 @@
 import asyncio
 import gc
+import json
 from abc import abstractmethod
 from unittest.mock import Mock
 
@@ -235,4 +236,4 @@ class BrokerTestclientTestcase(BrokerPublishTestcase, BrokerConsumeTestcase):
 
             # test request
             data = await br.request(ModelA(param1=1), queue)
-            assert ModelB.model_validate_json(data.body) == ModelB(param2=1)
+            assert json.loads(data.body) == {"param2": 1}, data.body
